@@ -31,6 +31,9 @@ public class viewStatsCommand implements CommandExecutor {
 			}
 			else if (args[0].equalsIgnoreCase("dodge")){
 				int dodgeLvl = fileSave.dodge.get(sender.getName());
+				if (fileSave.dodgeBoost.containsKey(sender.getName())){
+					dodgeLvl += fileSave.dodgeBoost.get(sender.getName());
+				}
 				double dodgeRate = (double) dodgeLvl / (double) (dodgeLvl + 1000) * 100;
 				DecimalFormat df = new DecimalFormat("###.##");
 				sentPlayer.sendMessage(ChatColor.GOLD.toString() + ChatColor.BOLD + "Your dodge rate ↺ is " + df.format(dodgeRate) + "%");
@@ -47,6 +50,9 @@ public class viewStatsCommand implements CommandExecutor {
 			}
 			else if (args[0].equalsIgnoreCase("speed")){
 				int speed = fileSave.walkSpeed.get(sender.getName());
+				if (fileSave.walkBoost.containsKey(sender.getName())){
+					speed += fileSave.walkBoost.get(sender.getName());
+				}
 				DecimalFormat df = new DecimalFormat("###.##");
 				sentPlayer.sendMessage(ChatColor.WHITE.toString() + ChatColor.BOLD + "Your speed ༄ lets you walk " + df.format(0.2 + speed / 1250) + "% faster");
 			}

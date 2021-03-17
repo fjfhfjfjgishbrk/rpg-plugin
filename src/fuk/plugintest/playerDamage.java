@@ -143,7 +143,7 @@ public class playerDamage implements Listener {
 					heal = false;
 				}
 				if (heal){
-					health = Math.min(maxHealth, health + healValue);
+					health = Math.min(playerHealth.maxHealthActual, health + healValue);
 					player.sendMessage(ChatColor.RED + "[Healed for " + Integer.toString(healValue) + "♥ health]");
 					fileSave.health.put(playername, health);
 					eat = true;
