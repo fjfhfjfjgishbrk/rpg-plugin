@@ -1,0 +1,28 @@
+main: fuk.plugintest.Main
+api-version: 1.13
+name: RPG Plugin
+version: 1.0
+author: me
+description: I test yay
+commands: 
+  ws: 
+    description: set walkspeed
+    usage: /ws [speed]
+    permission: plugintest.ws
+    permission-message: No you no use hahahahaha!
+  atk:
+    description: set atk stuff
+    usage: /atk
+    permission: plugintest.atk
+    permission-message: No you no use hahahahaha!
+  giveitem:
+    description: give item
+    usage: /giveitem [item]
+    permission: plugintest.giveitem
+    permission-message: No you no use hahahahaha!
+  viewstats:
+    description: viewstats
+    usage: /viewstats [stat]
+    permission: plugintest.viewstats
+    permission-message: No you no use hahahahaha!
+    
