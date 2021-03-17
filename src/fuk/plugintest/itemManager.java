@@ -42,12 +42,14 @@ public class itemManager {
 	public static ItemStack stackHay;
 	public static ItemStack exStackHay;
 	public static ItemStack betterBread;
+	public static ItemStack crystalSeed;
+	public static ItemStack transWheat;
 	
 	public static ItemStack sandwich;
 	public static ItemStack naturalSandwich;
 	public static ItemStack naturalSandwichT2;
 	
-	public static List<ItemStack> noRightClick;
+	public static ArrayList<ItemStack> noRightClick = new ArrayList<ItemStack>();
 	
 	public itemManager(Main plugin){
 		this.plugin = plugin;
@@ -324,7 +326,7 @@ public class itemManager {
 		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "recover"), PersistentDataType.INTEGER, 350);
 		item.setItemMeta(meta);
-		stackBeef = item;
+		betterBread = item;
 	}
 	
 	//sandwich
@@ -341,7 +343,85 @@ public class itemManager {
 		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "recover"), PersistentDataType.INTEGER, 900);
 		item.setItemMeta(meta);
-		stackBeef = item;
+		sandwich = item;
+	}
+	
+	//natural sandwich
+	private void createNaturalSandwich(){
+		ItemStack item = new ItemStack(Material.BREAD, 1);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(ChatColor.DARK_PURPLE + "Natural sandwich");
+		List<String> lore = new ArrayList<>();
+		lore.add(ChatColor.RED + "Heals you for 800♥");
+		lore.add(ChatColor.WHITE + "Gives you 250 ༄ walk speed for 8 minutes");
+		lore.add(ChatColor.GOLD + "Gives you 250 ↺ dodge for 8 minutes");
+		lore.add("");
+		lore.add(ChatColor.GRAY + "It's a sandwich that is natural. With crystals in it.");
+		meta.setLore(lore);
+		meta.addEnchant(Enchantment.LUCK, 1, false);
+		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "recover"), PersistentDataType.INTEGER, 800);
+		meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "walkBuff"), PersistentDataType.INTEGER_ARRAY, new int[]{250, 480});
+		meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "dodgeBuff"), PersistentDataType.INTEGER_ARRAY, new int[]{250, 480});
+		item.setItemMeta(meta);
+		naturalSandwich = item;
+	}
+	
+	//transparent sandwich
+	private void createNaturalSandwichT2(){
+		ItemStack item = new ItemStack(Material.BREAD, 1);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(ChatColor.AQUA + "Translucent uncultivated sandwich");
+		List<String> lore = new ArrayList<>();
+		lore.add(ChatColor.RED + "Heals you for 3200♥");
+		lore.add(ChatColor.WHITE + "Gives you 1200 ༄ walk speed for 35 minutes");
+		lore.add(ChatColor.GOLD + "Gives you 650 ↺ dodge for 30 minutes");
+		lore.add("");
+		lore.add(ChatColor.GRAY + "The sandwich starts to become transparent, but you can still see");
+		lore.add(ChatColor.GRAY + "enough of it to be able to take a bite.");
+		meta.setLore(lore);
+		meta.addEnchant(Enchantment.LUCK, 1, false);
+		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "recover"), PersistentDataType.INTEGER, 800);
+		meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "walkBuff"), PersistentDataType.INTEGER_ARRAY, new int[]{1200, 2100});
+		meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "dodgeBuff"), PersistentDataType.INTEGER_ARRAY, new int[]{650, 1800});
+		item.setItemMeta(meta);
+		naturalSandwichT2 = item;
+	}
+	
+	//crystal seed
+	private void createCrystalSeed(){
+		ItemStack item = new ItemStack(Material.WHEAT_SEEDS, 1);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(ChatColor.DARK_PURPLE + "Crystal seed");
+		List<String> lore = new ArrayList<>();
+		lore.add("");
+		lore.add(ChatColor.ITALIC.toString() + ChatColor.DARK_GRAY + "It's a seed but somehow has crystal stuck to it. Might");
+		lore.add(ChatColor.ITALIC.toString() + ChatColor.DARK_GRAY + "be tasty to eat it though.");
+		meta.setLore(lore);
+		meta.addEnchant(Enchantment.LUCK, 1, false);
+		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		item.setItemMeta(meta);
+		crystalSeed = item;
+		noRightClick.add(crystalSeed);
+	}
+	
+	//trans wheat
+	private void createTransWheat(){
+		ItemStack item = new ItemStack(Material.WHEAT, 1);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(ChatColor.AQUA + "Translucent wheat");
+		List<String> lore = new ArrayList<>();
+		lore.add("");
+		lore.add(ChatColor.ITALIC.toString() + ChatColor.DARK_GRAY + "Since this wheat is nearly invisible, it is very hard for people");
+		lore.add(ChatColor.ITALIC.toString() + ChatColor.DARK_GRAY + "to find it while harvesting. Some people have only ever seen one");
+		lore.add(ChatColor.ITALIC.toString() + ChatColor.DARK_GRAY + "in their whole life, and mostly they only see it for a split second");
+		lore.add(ChatColor.ITALIC.toString() + ChatColor.DARK_GRAY + "before it disappears again.");
+		meta.setLore(lore);
+		meta.addEnchant(Enchantment.LUCK, 1, false);
+		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		item.setItemMeta(meta);
+		transWheat = item;
 	}
 	
 	private void initWheat(){
@@ -351,5 +431,9 @@ public class itemManager {
 		createVeryStackHay();
 		createProcessedBread();
 		createSandwich();
+		createNaturalSandwich();
+		createNaturalSandwichT2();
+		createCrystalSeed();
+		createTransWheat();
 	}
 }

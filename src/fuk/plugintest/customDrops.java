@@ -36,6 +36,19 @@ public class customDrops {
 		return drops;
 	}
 	
+	public static List<ItemStack> getCropDrops(Material crop, Player player){
+		
+		List<ItemStack> drops = new ArrayList<ItemStack>();
+		String playername = player.getName();
+		luck = fileSave.luck.get(playername);
+		
+		if (crop.equals(Material.WHEAT)){
+			drops = addDropsWheat(drops, player);
+		}
+		
+		return drops;
+	}
+	
 	private static List<ItemStack> addDropsCow(List<ItemStack> drops, Player player){
 		drops.add(new ItemStack(Material.BEEF, 1 + (int) Math.floor(Math.random() * Math.min(luck, 3000d) * 0.01d)));
 		if (Math.random() < 0.05){
@@ -62,5 +75,29 @@ public class customDrops {
 		return drops;
 	}
 	
-	
+	private static List<ItemStack> addDropsWheat(List<ItemStack> drops, Player player){
+		drops.add(new ItemStack(Material.WHEAT_SEEDS, 1 + (int) Math.round(Math.random())));
+		drops.add(new ItemStack(Material.WHEAT, 1 + (int) Math.floor(Math.random() * Math.min(luck, 1500d) * 0.006d)));
+		if (Math.random() < 0.04){
+			ItemStack hay = new ItemStack(Material.HAY_BLOCK);
+			drops.add(hay);
+			player.sendMessage(ChatColor.BOLD.toString()  + ChatColor.YELLOW + "[Uncommon Drop!] Hay bale");
+		}
+		if (Math.random() < 0.005){
+			ItemStack wheat = itemManager.stackWheat.clone();
+			drops.add(wheat);
+			player.sendMessage(ChatColor.BOLD.toString()  + ChatColor.LIGHT_PURPLE + "[Extreme Rare Drop!] Stacked wheat");
+		}
+		if (Math.random() < 0.0008 && luck > 300){
+			ItemStack seed = itemManager.crystalSeed.clone();
+			drops.add(seed);
+			player.sendMessage(ChatColor.BOLD.toString()  + ChatColor.DARK_PURPLE + "[Legendary Drop!] Crystal seed");
+		}
+		if (Math.random() < 0.0001 && luck > 1200){
+			ItemStack wheat = itemManager.transWheat.clone();
+			drops.add(wheat);
+			player.sendMessage(ChatColor.BOLD.toString()  + ChatColor.AQUA + "[Godly Drop!] Translucent wheat");
+		}
+		return drops;
+	}
 }

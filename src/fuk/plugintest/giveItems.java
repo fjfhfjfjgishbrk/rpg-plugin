@@ -14,17 +14,35 @@ public class giveItems implements CommandExecutor {
 			if (args[0].equalsIgnoreCase("cowsword")){
 				player.getInventory().addItem(itemManager.cowSword);
 			}
-			if (args[0].equalsIgnoreCase("godmilk")){
+			else if (args[0].equalsIgnoreCase("godmilk")){
 				player.getInventory().addItem(itemManager.godMilk);
 			}
-			if (args[0].equalsIgnoreCase("cowchest")){
+			else if (args[0].equalsIgnoreCase("cowchest")){
 				player.getInventory().addItem(itemManager.cowChestplate);
 			}
-			if (args[0].equalsIgnoreCase("cowchest2")){
+			else if (args[0].equalsIgnoreCase("cowchest2")){
 				player.getInventory().addItem(itemManager.cowChestplateT2);
 			}
-			if (args[0].equalsIgnoreCase("milkcata")){
+			else if (args[0].equalsIgnoreCase("milkcata")){
 				player.getInventory().addItem(itemManager.milkCatalyst);
+			}
+			else if (args[0].equalsIgnoreCase("crystalseed")){
+				player.getInventory().addItem(itemManager.crystalSeed);
+			}
+			else if (args[0].equalsIgnoreCase("transwheat")){
+				player.getInventory().addItem(itemManager.transWheat);
+			}
+			else if (args[0].equalsIgnoreCase("naturalsandwich")){
+				player.getInventory().addItem(itemManager.naturalSandwich);
+			}
+			else if (args[0].equalsIgnoreCase("naturalsandwicht2")){
+				player.getInventory().addItem(itemManager.naturalSandwichT2);
+			}
+			else if (args[0].equalsIgnoreCase("stackhay")){
+				player.getInventory().addItem(itemManager.stackHay);
+			}
+			else if (args[0].equalsIgnoreCase("stackwheat")){
+				player.getInventory().addItem(itemManager.stackWheat);
 			}
 		}
 		return false;

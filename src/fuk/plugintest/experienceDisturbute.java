@@ -132,7 +132,6 @@ public class experienceDisturbute implements Listener {
 		}
 		event.setDropItems(false);
 		if (cropXp.containsKey(blockBroken.getType())){
-			System.out.println(blockBroken.getBlockData() instanceof Ageable);
 			if (blockBroken.getBlockData() instanceof Ageable){
 				if (!(((Ageable) blockBroken.getBlockData()).getAge() == ((Ageable) blockBroken.getBlockData()).getMaximumAge())){
 					return;
@@ -159,6 +158,10 @@ public class experienceDisturbute implements Listener {
 			}
 			int levelPercent = (int) ((double) fileSave.expToNextFarmLvl.get(playername) / (double) fileSave.farmExpRequired.get(playername) * 100d);
 			player.sendMessage(ChatColor.AQUA + "+" + Integer.toString((int) Math.round(experienceEarned)) + " farming xp " + ChatColor.GOLD + "[" + Integer.toString(levelPercent) + "%]");
+			List<ItemStack> dropList = customDrops.getCropDrops(event.getBlock().getType(), player);
+			for (ItemStack item: dropList){
+				player.getInventory().addItem(item);
+			}
 		}
 	}
 	

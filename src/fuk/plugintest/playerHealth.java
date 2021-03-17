@@ -71,7 +71,14 @@ public class playerHealth implements Listener {
 					int health = fileSave.health.get(playername);
 					int maxHealth = fileSave.maxHealth.get(playername);
 					int defense = fileSave.defense.get(playername);
+					int dodge = fileSave.attackLevel.get(playername);
+					int speed = fileSave.farmLevel.get(playername);
 					
+					
+					//food boosts
+					defense = setBoosts(player, fileSave.defenseBoost, fileSave.defenseDuration, defense);
+					dodge = setBoosts(player, fileSave.dodgeBoost, fileSave.dodgeDuration, dodge);
+					speed = setBoosts(player, fileSave.walkBoost, fileSave.walkDuration, speed);
 					
 					// atk, def, dodge
 					int boost[] = new int[]{0, 0, 0};
@@ -87,9 +94,10 @@ public class playerHealth implements Listener {
 					
 					maxHealth += boost[0];
 					defense += boost[1];
-					fileSave.dodge.put(playername, fileSave.attackLevel.get(playername) + boost[2]);
-					fileSave.walkSpeed.put(playername, fileSave.dodge.get(playername));
-						
+					fileSave.dodge.put(playername, dodge + boost[2]);
+					fileSave.walkSpeed.put(playername, speed);
+					
+					
 					//-------------------------
 					//looking for custom item buffs
 					
@@ -114,8 +122,6 @@ public class playerHealth implements Listener {
 					player.setHealth(Math.min(20d, 20d * (double) health / (double) maxHealth)); 
 					
 					//setting defense
-					defense = setBoosts(player, fileSave.defenseBoost, fileSave.defenseDuration, defense);
-					
 					double damageReduction = (((double) defense / (double) (defense + 150)) * 100d);
 					DecimalFormat df = new DecimalFormat("###.###");
 					
@@ -123,6 +129,9 @@ public class playerHealth implements Listener {
 					
 					//setting walkspeed
 					int walkLvl = fileSave.walkSpeed.get(playername);
+					if (fileSave.walkBoost.containsKey(playername)){
+						walkLvl += fileSave.walkBoost.get(playername);
+					}
 					float walkSpeed = 0.2f + Math.min(0.4f, (float) (walkLvl / 1250));
 					player.setWalkSpeed(walkSpeed);
 					
