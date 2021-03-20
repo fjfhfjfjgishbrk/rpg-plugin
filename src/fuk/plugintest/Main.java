@@ -22,6 +22,8 @@ public class Main extends JavaPlugin implements Listener{
 		new damageCalculate(this);
 		new playerHealth(this);
 		new playerDamage(this);
+		new playerEat(this);
+		new InventoryManager(this);
 		getCommand("ws").setExecutor(new walkSpeedCommand());
 		getCommand("atk").setExecutor(new atkCommand());
 		getCommand("giveitem").setExecutor(new giveItems());
