@@ -30,7 +30,7 @@ public class EnchantManager implements Listener{
 	
 	private static Main plugin;
 	
-	private File enchantFile;
+	private static File enchantFile;
 	private static YamlConfiguration enchantConfig;
 	
 	//playername, skill, itemStack
@@ -60,7 +60,7 @@ public class EnchantManager implements Listener{
 		List<String> lore = new ArrayList<>();
 		lore.add("");
 		for (String skillName: skills.keySet()){
-			if (skillName == "None" || skills.get(skillName) == 1){
+			if (skillName == "None" || skills.get(skillName) == 0){
 				continue;
 			}
 			else {
@@ -124,11 +124,13 @@ public class EnchantManager implements Listener{
 				if (invClicked == EnchantWheat.wheatInventory.get(name)){
 					EnchantWheat.clicked(event.getCurrentItem(), event.getWhoClicked());
 					event.setCancelled(true);
-					Bukkit.getServer().getScheduler().runTask(plugin, new Runnable(){
-						public void run(){
-							event.getWhoClicked().closeInventory();
-						}
-					});
+					if (true){
+						Bukkit.getServer().getScheduler().runTask(plugin, new Runnable(){
+							public void run(){
+								event.getWhoClicked().closeInventory();
+							}
+						});
+					}
 				}
 			}
 		}
@@ -148,14 +150,15 @@ public class EnchantManager implements Listener{
 	
 	@EventHandler
 	public void LoadEnchantFile(PlayerJoinEvent event){
+		EnchantWheat.initList();
 		
-		loadLevels(wheatLevels, ".wheat.", event.getPlayer());
+		loadLevels(wheatLevels, ".wheat.", event.getPlayer(), EnchantWheat.wheatSkillNames);
 		
 		initMenu(event.getPlayer());
 	}
 	
 	
-	public void saveEnchantFile(){
+	public static void saveEnchantFile(){
 		
 		saveIntStuff(wheatLevels, ".wheat.");
 		
@@ -182,14 +185,12 @@ public class EnchantManager implements Listener{
  	}
 	
 	
-	private static void loadLevels(HashMap<String, HashMap<String, Integer>> h, String s, Player player){
+	private static void loadLevels(HashMap<String, HashMap<String, Integer>> h, String s, Player player, ArrayList<String> nameList){
 		String playername = player.getName();
 		HashMap<String, Integer> skillMap = new HashMap<String, Integer>();
-		Map<String, Integer> nullMap = new HashMap<String, Integer>();
-		nullMap.put("None", 1);
-		Map<String, Integer> skillData = (Map<String, Integer>) enchantConfig.get("players." + playername + s, nullMap);
-		for (String skillName: skillData.keySet()){
-			skillMap.put(skillName, skillData.get(skillName));
+		for (String skillName: nameList){
+			Integer skillLevel = (Integer) enchantConfig.get("players." + playername + s + skillName, 0);
+			skillMap.put(skillName, skillLevel);
 		}
 		h.put(playername, skillMap);
 		

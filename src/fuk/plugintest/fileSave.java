@@ -131,24 +131,32 @@ public class fileSave implements Listener {
 
          mobConfig = YamlConfiguration.loadConfiguration(mobData);
          
-         for (World w : Bukkit.getWorlds()) {
-        	 for (Entity e : w.getEntities()){
-            	if (e instanceof Player || e instanceof ArmorStand){
-                	continue;
-                }
-                else if (e instanceof LivingEntity){
-                	int mobLevel = Integer.valueOf(String.valueOf(getMobConfig().get("mobs." + e.getUniqueId().toString() + ".level", -1)));
-                	double mobMaxHealth = Double.valueOf(String.valueOf(getMobConfig().get("mobs." + e.getUniqueId().toString() + ".maxHealth", -1)));
-                	double mobHealth = Double.valueOf(String.valueOf(getMobConfig().get("mobs." + e.getUniqueId().toString() + ".health", -1)));
-                 	if (!(mobLevel < 0 || mobMaxHealth < 0 || mobHealth < 0)){
-                 		HealthBar.mobLevel.put(e.getUniqueId(), mobLevel);
-                 		HealthBar.mobMaxHealth.put(e.getUniqueId(), mobMaxHealth);
-                 		HealthBar.mobHealth.put(e.getUniqueId(), mobHealth);
-                 	}
-                }
+         Bukkit.getServer().getScheduler().runTaskTimer(this.plugin, new Runnable(){
+        	 public void run(){
+        		 for (World w : Bukkit.getWorlds()) {
+                	 for (Entity e : w.getEntities()){
+                		if (e instanceof Player || e instanceof ArmorStand){
+                			continue;
+                		}
+                		else if (HealthBar.mobLevel.containsKey(e.getUniqueId())){
+                        	continue;
+                        }
+                        else if (e instanceof LivingEntity){
+                        	int mobLevel = Integer.valueOf(String.valueOf(getMobConfig().get("mobs." + e.getUniqueId().toString() + ".level", -1)));
+                        	double mobMaxHealth = Double.valueOf(String.valueOf(getMobConfig().get("mobs." + e.getUniqueId().toString() + ".maxHealth", -1)));
+                        	double mobHealth = Double.valueOf(String.valueOf(getMobConfig().get("mobs." + e.getUniqueId().toString() + ".health", -1)));
+                         	if (!(mobLevel < 0 || mobMaxHealth < 0 || mobHealth < 0)){
+                         		HealthBar.mobLevel.put(e.getUniqueId(), mobLevel);
+                         		HealthBar.mobMaxHealth.put(e.getUniqueId(), mobMaxHealth);
+                         		HealthBar.mobHealth.put(e.getUniqueId(), mobHealth);
+                         		BossBarHealth.setHealthBar(e, true);
+                         	}
+                        }
 
+                	 }
+                 }
         	 }
-         }
+         }, 10l, 20l);
      }
  	
  	

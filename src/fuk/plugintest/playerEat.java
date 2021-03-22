@@ -140,8 +140,8 @@ public class playerEat implements Listener {
 					int dodge[] = player.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().get(dodgeBuffTag, PersistentDataType.INTEGER_ARRAY);
 					int amount = dodge[0];
 					int duration = dodge[1];
-					fileSave.walkBoost.put(playername, amount);
-					fileSave.walkDuration.put(playername, duration);
+					fileSave.dodgeBoost.put(playername, amount);
+					fileSave.dodgeDuration.put(playername, duration);
 					player.sendMessage(ChatColor.WHITE + "[Gained " + Integer.toString(amount) + "↺ dodge for " + Integer.toString(duration) + " seconds]");
 					eat = true;
 				}

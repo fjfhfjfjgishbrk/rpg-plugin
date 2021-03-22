@@ -80,6 +80,7 @@ public class HealthBar implements Listener {
 			int attackSpeed = fileSave.attackSpeed.get(playername);
 			int cooldown = (int) (500 - 9.6 * Math.pow(attackSpeed, 0.4));
 			attackCooldown.put(playername, System.currentTimeMillis() + cooldown);
+			BossBarHealth.bossbar.get(event.getEntity().getUniqueId()).addPlayer(player);
 		}
 		barUpdate(event.getEntity(), damageDealt, crit);
 	}
@@ -149,15 +150,25 @@ public class HealthBar implements Listener {
 					}
 					double maxHealth = mobMaxHealth.get(mobID);
 					
+					
+					if (!BossBarHealth.bossbar.containsKey(mobID)){
+						BossBarHealth.setHealthBar(spawnedMob, true);
+					}
+					else {
+						BossBarHealth.setHealthBar(spawnedMob, false);
+					}
+					
 					//change health bar
 					DecimalFormat df = new DecimalFormat("###.#");
 					if (health <= 0){
-						spawnedMob.setCustomName(ChatColor.BOLD + "[Lv." + level + "] " + ChatColor.RESET + ChatColor.BLACK + "0 / " + df.format(maxHealth));
-						spawnedMob.setCustomNameVisible(true);
+						spawnedMob.setCustomName("");
+						spawnedMob.setCustomNameVisible(false);
 						spawnedMob.setHealth(0);
 						mobLevel.remove(mobID);
 						mobMaxHealth.remove(mobID);
 						mobHealth.remove(mobID);
+						BossBarHealth.bossbar.get(mobID).removeAll();
+						BossBarHealth.bossbar.remove(mobID);
 					} 
 					else {
 						spawnedMob.setCustomName(ChatColor.BOLD + "[Lv." + level + "] " + ChatColor.RESET + getHealthColor(health, maxHealth) + df.format(health) + " / " + df.format(maxHealth));

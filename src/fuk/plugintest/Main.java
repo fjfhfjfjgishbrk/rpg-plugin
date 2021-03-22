@@ -24,6 +24,8 @@ public class Main extends JavaPlugin implements Listener{
 		new playerDamage(this);
 		new playerEat(this);
 		new InventoryManager(this);
+		new EntityElementDefense(this);
+		new BossBarHealth(this);
 		getCommand("ws").setExecutor(new walkSpeedCommand());
 		getCommand("atk").setExecutor(new atkCommand());
 		getCommand("giveitem").setExecutor(new giveItems());
@@ -34,7 +36,7 @@ public class Main extends JavaPlugin implements Listener{
 	public void onDisable(){
 		fileSave.createMobConfig();
 		fileSave.savePlayerConfig();
-		
+		EnchantManager.saveEnchantFile();
 	}
 	
 	

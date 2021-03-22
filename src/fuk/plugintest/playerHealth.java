@@ -132,7 +132,7 @@ public class playerHealth implements Listener {
 					if (fileSave.walkBoost.containsKey(playername)){
 						walkLvl += fileSave.walkBoost.get(playername);
 					}
-					float walkSpeed = 0.2f + Math.min(0.4f, (float) (walkLvl / 1250));
+					float walkSpeed = 0.2f + Math.min(0.4f, 0.1f * (float) (walkLvl / 1250));
 					player.setWalkSpeed(walkSpeed);
 					
 					
