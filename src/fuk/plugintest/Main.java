@@ -3,6 +3,10 @@ package fuk.plugintest;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import fuk.plugintest.enchants.EnchantManager;
+import fuk.plugintest.items.itemManager;
+import fuk.plugintest.recipes.recipeManager;
+
 public class Main extends JavaPlugin implements Listener{
 	
     private static Main instance;

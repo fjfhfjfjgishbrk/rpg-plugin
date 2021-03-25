@@ -1,4 +1,4 @@
-package fuk.plugintest;
+package fuk.plugintest.items;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,12 +18,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import fuk.plugintest.Main;
+import fuk.plugintest.giveItems;
+
 public class itemManager {
 	
 	private Main plugin;
 	
 	File uuidFile;
 	YamlConfiguration uuidConfig;
+	
+	public static ItemStack testFireSword;
 	
 	public static ItemStack cowSword;
 	public static ItemStack stackBeef;
@@ -45,18 +50,32 @@ public class itemManager {
 	public static ItemStack naturalSandwich;
 	public static ItemStack naturalSandwichT2;
 	
+	public static ItemStack stackBeetroot;
+	public static ItemStack exStackBeetroot;
+	public static ItemStack beetrootSingularity;
+	public static ItemStack roastedBeetroot;
+	public static ItemStack crystalBeetroot;
+	public static ItemStack liquidBeetroot;
+	public static ItemStack moistRoastBeetroot;
+	
 	public static ArrayList<ItemStack> noRightClick = new ArrayList<ItemStack>();
 	
 	public itemManager(Main plugin){
 		this.plugin = plugin;
 		new CowItems(plugin);
 		new ItemsWheat(plugin);
+		new ItemsTest(plugin);
+		new ItemsBeetroot(plugin);
 		readUUID();
 	}
 	
 	private void init(){
 		CowItems.initCow();
 		ItemsWheat.initWheat();
+		ItemsTest.initTestItems();
+		ItemsBeetroot.initBeet();
+		
+		giveItems.init();
 	}
 	
 	public void readUUID(){
@@ -69,6 +88,7 @@ public class itemManager {
 		CowItems.cowchestID = setUUID("cowChest");
 		CowItems.cowchest2ID = setUUID("cowChest2ID");
 		CowItems.cowswordID = setUUID("cowSword");
+		ItemsTest.testUUID = setUUID("testItems");
 		
 		try {
  	    	uuidConfig.save(uuidFile);

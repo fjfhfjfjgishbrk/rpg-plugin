@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
+import fuk.plugintest.items.itemManager;
 import net.md_5.bungee.api.ChatColor;
 
 public class playerEat implements Listener {
@@ -34,6 +35,7 @@ public class playerEat implements Listener {
 			NamespacedKey defBuffTag = new NamespacedKey(plugin, "defenseBuff");
 			NamespacedKey walkBuffTag = new NamespacedKey(plugin, "walkBuff");
 			NamespacedKey dodgeBuffTag = new NamespacedKey(plugin, "dodgeBuff");
+			NamespacedKey healBuffTag = new NamespacedKey(plugin, "healBuff");
 			ItemStack holdingItem = player.getInventory().getItemInMainHand();
 			if (holdingItem == null || !holdingItem.hasItemMeta()){
 				return;
@@ -143,6 +145,30 @@ public class playerEat implements Listener {
 					fileSave.dodgeBoost.put(playername, amount);
 					fileSave.dodgeDuration.put(playername, duration);
 					player.sendMessage(ChatColor.WHITE + "[Gained " + Integer.toString(amount) + "↺ dodge for " + Integer.toString(duration) + " seconds]");
+					eat = true;
+				}
+			}
+			
+			//heal boost
+			if (player.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(healBuffTag, PersistentDataType.INTEGER_ARRAY)){
+				boolean boost = true;
+				if (fileSave.dodgeBoost.containsKey(playername)){
+					player.sendMessage(ChatColor.GOLD + "You already have dodge buff!");
+					boost = false;
+				}
+				else if (boostCooldown.containsKey(playername)){
+					if (boostCooldown.get(playername) > System.currentTimeMillis()){
+						player.sendMessage(ChatColor.GOLD + "Dodge boosting still in cooldown.");
+						boost = false;
+					}
+				}
+				if (boost){
+					int heal[] = player.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().get(healBuffTag, PersistentDataType.INTEGER_ARRAY);
+					int amount = heal[0];
+					int duration = heal[1];
+					fileSave.healBoost.put(playername, amount);
+					fileSave.healDuration.put(playername, duration);
+					player.sendMessage(ChatColor.AQUA + "[Gained " + Double.toString((double) amount / 100d) + "% ❉ healing for " + Integer.toString(duration) + " seconds]");
 					eat = true;
 				}
 			}

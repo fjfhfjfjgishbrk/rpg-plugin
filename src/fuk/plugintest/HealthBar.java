@@ -46,6 +46,7 @@ public class HealthBar implements Listener {
 			if (!mob.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)){
 				mob.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100000000, 6, false, false));
 			}
+			mob.setNoDamageTicks(0);
 		}
 		barUpdate(event.getEntity(), 0, false);
 	}

@@ -67,15 +67,23 @@ public class BossBarHealth {
 		Double health = HealthBar.mobHealth.get(mobid);
 		Integer level = HealthBar.mobLevel.get(mobid);
 		ArrayList<Integer> elementDef;
+		ArrayList<Integer> elementAtk;
 		if (EntityElementDefense.elementDefense.containsKey(entity.getType())){
 			elementDef = EntityElementDefense.elementDefense.get(entity.getType());
 		}
 		else {
 			elementDef = nullDef;
 		}
+		if (EntityElementDefense.elementAttack.containsKey(entity.getType())){
+			elementAtk = EntityElementDefense.elementAttack.get(entity.getType());
+		}
+		else {
+			elementAtk = nullDef;
+		}
 		DecimalFormat df = new DecimalFormat("###.#");
 		Boolean haveWeak = false;
 		Boolean haveDef = false;
+		Boolean haveStr = false;
 		Integer count = 0;
 		String title = "";
 		title += ChatColor.WHITE + "[Lv. " + Integer.toString(level) + "] ";
@@ -102,6 +110,18 @@ public class BossBarHealth {
 			count++;
 		}
 		if (!haveDef){
+			title += "None";
+		}
+		count = 0;
+		title += ChatColor.GOLD + " Dam: ";
+		for (Integer atk: elementAtk){
+			if (atk > 0){
+				title += symbols.get(count);
+				haveStr = true;
+			}
+			count++;
+		}
+		if (!haveStr){
 			title += "None";
 		}
 		bar.setTitle(title);

@@ -1,5 +1,7 @@
 package fuk.plugintest;
 
+import java.util.ArrayList;
+
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -12,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import fuk.plugintest.items.itemManager;
 import net.md_5.bungee.api.ChatColor;
 
 public class playerDamage implements Listener {
@@ -34,6 +37,8 @@ public class playerDamage implements Listener {
 		LivingEntity attackEntity = (LivingEntity) event.getDamager();
 		Player player = (Player) event.getEntity();
 		String playername = player.getName();
+		ArrayList<Integer> elementDefense = fileSave.elementdefense.get(playername);
+		ArrayList<Integer> elementAttack = EntityElementDefense.elementAttack.get(attackEntity.getType());
 		int dodgeLvl = fileSave.dodge.get(playername);
 		if (fileSave.dodge.containsKey(playername)){
 			dodgeLvl += fileSave.dodge.get(playername);
@@ -48,7 +53,19 @@ public class playerDamage implements Listener {
 		int attackLvl = HealthBar.mobLevel.get(attackEntity.getUniqueId());
 		int defense = playerHealth.defenseActual;
 		double baseAtk = attackEntity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue();
-		double damageTaken = baseAtk * (double) attackLvl + Math.pow(2d, Math.pow(attackLvl, 1/3.3));
+		double damage = baseAtk;
+		for (int i = 0; i < 6; i++){
+			int def = elementDefense.get(i);
+			int atk = elementAttack.get(i);
+			if (def < 0){
+				damage += baseAtk * ((double) atk / 150d) * (1d + Math.abs(def / 125d));
+			}
+			else if (def > 0){
+				damage += baseAtk * ((double) atk / 150d) * (1d - def / (double) (175 + def));
+			}
+		}
+		
+		double damageTaken = damage * (double) attackLvl + Math.pow(2d, Math.pow(attackLvl, 1/3.3));
 		System.out.println(Double.toString(damageTaken));
 		damageTaken *= (1d - (double) defense / (double) (100d + defense));
 		System.out.println(Double.toString(damageTaken));

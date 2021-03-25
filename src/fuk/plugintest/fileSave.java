@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -54,6 +53,7 @@ public class fileSave implements Listener {
     public static HashMap <String, Integer> health = new HashMap<String, Integer>();
     public static HashMap <String, Integer> maxHealth = new HashMap<String, Integer>();
     public static HashMap <String, Integer> luck = new HashMap<String, Integer>();
+    public static HashMap <String, ArrayList<Integer>> elementdefense = new HashMap<String, ArrayList<Integer>>();
     public static HashMap <String, Integer> defense = new HashMap<String, Integer>();
     public static HashMap <String, Integer> defenseBoost = new HashMap<String, Integer>();
     public static HashMap <String, Integer> defenseDuration = new HashMap<String, Integer>();
@@ -68,6 +68,8 @@ public class fileSave implements Listener {
     public static HashMap <String, Long> critRate = new HashMap<String, Long>();
     public static HashMap <String, Long> critDamage = new HashMap<String, Long>();
     public static HashMap <String, Long> heal = new HashMap<String, Long>();
+    public static HashMap <String, Integer> healBoost = new HashMap<String, Integer>();
+    public static HashMap <String, Integer> healDuration = new HashMap<String, Integer>();
     
     public static ArrayList<Location> blockbreak = new ArrayList<Location>();
     private static Main plugin;
@@ -190,6 +192,16 @@ public class fileSave implements Listener {
  		
  		loadLevelStuff(player, "fishing", fishLevel, expToNextFishLvl, fishExpRequired);
  	 	
+ 	 	ArrayList<Integer> nulllist = new ArrayList<Integer>();
+ 	 	for (int i = 0; i < 6; i++){
+ 	 		nulllist.add(0);
+ 	 	}
+ 	 	
+ 	 	elementdefense.put(playername, (ArrayList<Integer>) playerConfig.getIntegerList("players." + playername + ".elementDefense"));
+ 		if (elementdefense.get(playername).isEmpty()){
+ 			elementdefense.put(playername, nulllist);
+ 		}
+ 	 	
  	 	
  	 	//-------------------------------
  	 	//init health stuff
@@ -239,6 +251,7 @@ public class fileSave implements Listener {
  	 	loadBoosts(player, defenseDuration, defenseBoost, "defense");
  	 	loadBoosts(player, walkDuration, walkBoost, "walk");
  	 	loadBoosts(player, dodgeDuration, dodgeBoost, "dodgeRate");
+ 	 	loadBoosts(player, healDuration, healBoost, "heal");
  	 	
  	 	
  	 	
@@ -326,6 +339,12 @@ public class fileSave implements Listener {
  	    saveIntStuff(dodgeBoost, ".dodgeRate.boost.amount");
  	    
  	    //-------------------------------
+ 	    //heal
+ 	    saveIntStuff(healDuration, ".heal.boost.duration");
+	    saveIntStuff(healBoost, ".heal.boost.amount");
+ 	    
+ 	    
+ 	    //-------------------------------
  	    //save forage stuff
  	    saveIntStuff(forageLevel, ".forage.level");
  	    saveLongStuff(expToNextForLvl, ".forage.exp");
@@ -343,6 +362,14 @@ public class fileSave implements Listener {
  	    saveLongStuff(expToNextFishLvl, ".fishing.exp");
  	    saveLongStuff(fishExpRequired, ".fishing.expTillNext");
  	    
+ 	    
+ 	    //save ele def
+ 	    Iterator<Entry<String, ArrayList<Integer>>> it = elementdefense.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry<String, ArrayList<Integer>> pair = (Map.Entry<String, ArrayList<Integer>>) it.next();
+	        getPlayerConfig().set("players.elementDefense", pair.getValue());
+	        it.remove();
+	    }
  	    
  	    //---------------------------------
  	    //save block break location

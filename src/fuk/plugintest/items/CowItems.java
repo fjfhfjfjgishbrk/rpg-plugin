@@ -1,4 +1,4 @@
-package fuk.plugintest;
+package fuk.plugintest.items;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +14,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+
+import fuk.plugintest.Main;
 
 public class CowItems {
 	
@@ -33,7 +35,7 @@ public class CowItems {
 			ItemMeta meta = item.getItemMeta();
 			meta.setDisplayName(ChatColor.DARK_RED + "Cow Eliminator");
 			List<String> lore = new ArrayList<>();
-			lore.add(ChatColor.GRAY + "Damage: " + ChatColor.RED + "+30");
+			lore.add(ChatColor.GRAY + "Damage: " + ChatColor.GREEN + "+30♦");
 			lore.add(ChatColor.GRAY + "Strength: " + ChatColor.RED + "+20");
 			lore.add("");
 			lore.add(ChatColor.YELLOW + "Ability: Cowpocalypse");
@@ -45,7 +47,7 @@ public class CowItems {
 			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(cowswordID, "generic.attackSpeed", 10, AttributeModifier.Operation.ADD_NUMBER));
 			meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "damage"), PersistentDataType.INTEGER, 30);
+			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "elementDamage"), PersistentDataType.INTEGER_ARRAY, new int[]{0, 0, 0, 30, 0, 0});
 			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "strength"), PersistentDataType.INTEGER, 20);
 			item.setItemMeta(meta);
 			itemManager.cowSword = item;
@@ -113,7 +115,7 @@ public class CowItems {
 			lore.add(ChatColor.GRAY + "Defense: " + ChatColor.RED + "+350");
 			lore.add("");
 			lore.add(ChatColor.YELLOW + "Ability: Purify force");
-			lore.add(ChatColor.GRAY + "Heals you for " + ChatColor.RED + "2%♥ Health " + ChatColor.GRAY + "per second");
+			lore.add(ChatColor.GRAY + "Heals you for " + ChatColor.RED + "1%♥ Health " + ChatColor.GRAY + "per second");
 			lore.add("");
 			lore.add(ChatColor.ITALIC.toString() + ChatColor.DARK_GRAY + "Combined with pure milk this chestplate has became one");
 			lore.add(ChatColor.ITALIC.toString() + ChatColor.DARK_GRAY + "of the hardest substance know on Earth.");
@@ -158,7 +160,7 @@ public class CowItems {
 			lore.add(ChatColor.GRAY + "Dodge: " + ChatColor.RED + "+450");
 			lore.add("");
 			lore.add(ChatColor.YELLOW + "Ability: Catalyzed purification");
-			lore.add(ChatColor.GRAY + "Heals you for " + ChatColor.RED + "5%♥ Health " + ChatColor.GRAY + "per second, and also");
+			lore.add(ChatColor.GRAY + "Heals you for " + ChatColor.RED + "3%♥ Health " + ChatColor.GRAY + "per second, and also");
 			lore.add(ChatColor.GRAY + "has a chance to recover " + ChatColor.RED + "125% damage " + ChatColor.GRAY + "taken on hit");
 			lore.add("");
 			lore.add(ChatColor.ITALIC.toString() + ChatColor.DARK_GRAY + "The purification force of the chestplate has now been");

@@ -12,6 +12,8 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import fuk.plugintest.enchants.EnchantManager;
+import fuk.plugintest.items.itemManager;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -73,12 +75,18 @@ public class playerHealth implements Listener {
 					int defense = fileSave.defense.get(playername);
 					int dodge = fileSave.attackLevel.get(playername);
 					int speed = fileSave.farmLevel.get(playername);
+					long heal = fileSave.fishLevel.get(playername);
+					
+					double healpercent = 1d + (double) heal * 0.0004;
 					
 					
 					//food boosts
 					defense = setBoosts(player, fileSave.defenseBoost, fileSave.defenseDuration, defense);
 					dodge = setBoosts(player, fileSave.dodgeBoost, fileSave.dodgeDuration, dodge);
 					speed = setBoosts(player, fileSave.walkBoost, fileSave.walkDuration, speed);
+					int healfood = setBoosts(player, fileSave.healBoost, fileSave.healDuration, 0);
+					
+					healpercent += (double) healfood / 10000d;
 					
 					// atk, def, dodge
 					int boost[] = new int[]{0, 0, 0};
@@ -91,11 +99,18 @@ public class playerHealth implements Listener {
 						boost = checkTags(chestplate, boost);
 					}
 					
+					//enchant buff
+					
+					dodge += EnchantManager.wheatLevels.get(playername).get("Dodge upgrade");
+					
+					
 					
 					maxHealth += boost[0];
 					defense += boost[1];
 					fileSave.dodge.put(playername, dodge + boost[2]);
 					fileSave.walkSpeed.put(playername, speed);
+					fileSave.heal.put(playername, heal);
+					
 					
 					
 					//-------------------------
@@ -104,17 +119,17 @@ public class playerHealth implements Listener {
 					//chestplate buff
 					if (chestplate != null){
 						if (chestplate.equals(itemManager.cowChestplate)){
-							health += (int) ((float) maxHealth * 0.02);
+							health += (int) ((float) maxHealth * 0.01) * healpercent;
 						}
 						else if (chestplate.equals(itemManager.cowChestplateT2)){
-							health += (int) ((float) maxHealth * 0.05);
+							health += (int) ((float) maxHealth * 0.03) * healpercent;
 						}
 					}
 					
 					maxHealthActual = maxHealth;
 					
 					//setting health
-					health += (int) ((float) maxHealth * 0.01);
+					health += (int) ((float) maxHealth * 0.01) * healpercent;
 					if (health > maxHealth){
 						health = maxHealth;
 					}

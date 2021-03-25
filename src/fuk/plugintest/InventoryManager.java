@@ -5,6 +5,8 @@ import java.util.HashMap;
 
 import org.bukkit.inventory.Inventory;
 
+import fuk.plugintest.enchants.EnchantManager;
+
 public class InventoryManager{
 	
 	private Main plugin;

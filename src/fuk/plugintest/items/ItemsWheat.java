@@ -1,4 +1,4 @@
-package fuk.plugintest;
+package fuk.plugintest.items;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+
+import fuk.plugintest.Main;
 
 public class ItemsWheat {
 	
@@ -40,7 +42,7 @@ public class ItemsWheat {
 			ItemMeta meta = item.getItemMeta();
 			meta.setDisplayName(ChatColor.DARK_RED + "Extremely stacked wheat");
 			List<String> lore = new ArrayList<>();
-			lore.add(ChatColor.GRAY + "It's more than a lot of wheat.");
+			lore.add(ChatColor.DARK_GRAY + "It's more than a lot of wheat.");
 			meta.setLore(lore);
 			meta.addEnchant(Enchantment.LUCK, 1, false);
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -54,7 +56,7 @@ public class ItemsWheat {
 			ItemMeta meta = item.getItemMeta();
 			meta.setDisplayName(ChatColor.LIGHT_PURPLE + "Condensed hay bale");
 			List<String> lore = new ArrayList<>();
-			lore.add(ChatColor.GRAY + "Wouldn't it be heavy holding this much wheat?");
+			lore.add(ChatColor.DARK_GRAY + "Wouldn't it be heavy holding this much wheat?");
 			meta.setLore(lore);
 			meta.addEnchant(Enchantment.LUCK, 1, false);
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -69,7 +71,7 @@ public class ItemsWheat {
 			ItemMeta meta = item.getItemMeta();
 			meta.setDisplayName(ChatColor.DARK_PURPLE + "Extremely condensed hay bale");
 			List<String> lore = new ArrayList<>();
-			lore.add(ChatColor.GRAY + "When will we ever have enough wheat?");
+			lore.add(ChatColor.DARK_GRAY + "When will we ever have enough wheat?");
 			meta.setLore(lore);
 			meta.addEnchant(Enchantment.LUCK, 1, false);
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -87,8 +89,8 @@ public class ItemsWheat {
 			lore.add(ChatColor.RED + "Heals you for 350♥");
 			meta.setLore(lore);
 			lore.add("");
-			lore.add(ChatColor.GRAY + "Made out of lots of wheat, although this sandwich looks");
-			lore.add(ChatColor.GRAY + "very heavy, it is surprising quite healthy.");
+			lore.add(ChatColor.DARK_GRAY + "Made out of lots of wheat, although this sandwich looks");
+			lore.add(ChatColor.DARK_GRAY + "very heavy, it is surprising quite healthy.");
 			meta.addEnchant(Enchantment.LUCK, 1, false);
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "recover"), PersistentDataType.INTEGER, 350);
@@ -104,7 +106,7 @@ public class ItemsWheat {
 			List<String> lore = new ArrayList<>();
 			lore.add(ChatColor.RED + "Heals you for 900♥");
 			lore.add("");
-			lore.add(ChatColor.GRAY + "Just a normal sandwich.");
+			lore.add(ChatColor.DARK_GRAY + "Just a normal sandwich.");
 			meta.setLore(lore);
 			meta.addEnchant(Enchantment.LUCK, 1, false);
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -123,7 +125,7 @@ public class ItemsWheat {
 			lore.add(ChatColor.WHITE + "Gives you 250 ༄ walk speed for 8 minutes");
 			lore.add(ChatColor.GOLD + "Gives you 250 ↺ dodge for 8 minutes");
 			lore.add("");
-			lore.add(ChatColor.GRAY + "It's a sandwich that is natural. With crystals in it.");
+			lore.add(ChatColor.DARK_GRAY + "It's a sandwich that is natural. With crystals in it.");
 			meta.setLore(lore);
 			meta.addEnchant(Enchantment.LUCK, 1, false);
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -144,8 +146,8 @@ public class ItemsWheat {
 			lore.add(ChatColor.WHITE + "Gives you 1200 ༄ walk speed for 35 minutes");
 			lore.add(ChatColor.GOLD + "Gives you 650 ↺ dodge for 30 minutes");
 			lore.add("");
-			lore.add(ChatColor.GRAY + "The sandwich starts to become transparent, but you can still see");
-			lore.add(ChatColor.GRAY + "enough of it to be able to take a bite.");
+			lore.add(ChatColor.DARK_GRAY + "The sandwich starts to become transparent, but you can still see");
+			lore.add(ChatColor.DARK_GRAY + "enough of it to be able to take a bite.");
 			meta.setLore(lore);
 			meta.addEnchant(Enchantment.LUCK, 1, false);
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);

@@ -1,5 +1,7 @@
 package fuk.plugintest;
 
+import java.util.ArrayList;
+
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -7,16 +9,26 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
+import fuk.plugintest.items.itemManager;
+
 public class damageCalculate {
 	
 	public Main plugin;
 	private static NamespacedKey damageTag;
+	//fire. water, ice, earth, thunder, poison
+	private static NamespacedKey elementdamageTag;
 	private static NamespacedKey strengthTag;
+	
+	private static ArrayList<Integer> nullDef = new ArrayList<Integer>();
 	
 	public damageCalculate(Main plugin){
 		this.plugin = plugin;
 		damageTag = new NamespacedKey(plugin, "damage");
+		elementdamageTag = new NamespacedKey(plugin, "elementDamage");
 		strengthTag = new NamespacedKey(plugin, "strength");
+		for (int i = 0; i < 6; i++){
+			nullDef.add(0);
+		}
 	}
 	
 	
@@ -29,6 +41,27 @@ public class damageCalculate {
 		if (heldItem.hasItemMeta()){
 			if (heldItem.getItemMeta().getPersistentDataContainer().has(damageTag, PersistentDataType.INTEGER)){
 				resultDamage = heldItem.getItemMeta().getPersistentDataContainer().get(damageTag, PersistentDataType.INTEGER);
+			}
+			else if (heldItem.getItemMeta().getPersistentDataContainer().has(elementdamageTag, PersistentDataType.INTEGER_ARRAY)){
+				ArrayList<Integer> elementDef = EntityElementDefense.elementDefense.get(entity.getType());
+				if (elementDef == null){
+					elementDef = nullDef;
+				}
+				resultDamage = 0;
+				int index = 0;
+				for (Integer eledamage: heldItem.getItemMeta().getPersistentDataContainer().get(elementdamageTag, PersistentDataType.INTEGER_ARRAY)){
+					double def = (double) elementDef.get(index);
+					if (def > 0){
+						resultDamage += eledamage * (1d - def / (double) (175 + def));
+					}
+					else if (def < 0){
+						resultDamage += eledamage * (1d + Math.abs(def / 125d));
+					}
+					else {
+						resultDamage += eledamage;
+					}
+					index += 1;
+				}
 			}
 		}
 			
