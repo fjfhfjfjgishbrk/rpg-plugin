@@ -25,4 +25,14 @@ commands:
     usage: /viewstats [stat]
     permission: plugintest.viewstats
     permission-message: No you no use hahahahaha!
+  playjames:
+    description: play with james lol
+    usage: /playjames [what do you want to do?]
+    permission: plugintest.playjames
+    permission-message: No you no use hahahahaha!
+  spawnmob:
+    description: spawn custom mobs
+    usage: /spawnmob [mob]
+    permission: plugintest.spawnmob
+    permission-message: No you no use hahahahaha!
     

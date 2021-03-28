@@ -44,6 +44,9 @@ public class damageCalculate {
 			}
 			else if (heldItem.getItemMeta().getPersistentDataContainer().has(elementdamageTag, PersistentDataType.INTEGER_ARRAY)){
 				ArrayList<Integer> elementDef = EntityElementDefense.elementDefense.get(entity.getType());
+				if (EntityElementDefense.customElementDefense.containsKey(entity.getUniqueId())){
+					elementDef = EntityElementDefense.customElementDefense.get(entity.getUniqueId());
+				}
 				if (elementDef == null){
 					elementDef = nullDef;
 				}

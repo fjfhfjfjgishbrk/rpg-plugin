@@ -15,12 +15,12 @@ public class Beetroot {
 	
 	public static List<ItemStack> addDrops(List<ItemStack> drops, Player player, Integer luck){
 		String playername = player.getName();
-		HashMap<String, Integer> luckMap = EnchantManager.wheatLevels.get(playername);
+		HashMap<String, Integer> luckMap = EnchantManager.beetrootLevels.get(playername);
 		int beetrootLuck = luckMap.get("Beetroot luck");
 		int stackWheatLuck = luckMap.get("Stacked beetroot luck");
 		int rareLuck = luckMap.get("Rare drops luck");
 		drops.add(new ItemStack(Material.BEETROOT_SEEDS, 1 + (int) Math.round(Math.random())));
-		drops.add(new ItemStack(Material.BEETROOT, (int) ((1 + Math.floor(Math.random() * Math.min(luck, 1500d) * 0.006d)) * (1 + (double) beetrootLuck * 0.006))));
+		drops.add(new ItemStack(Material.BEETROOT, (int) ((1 + Math.floor(Math.random() * Math.min(luck, 1500d) * 0.005d)) * (1 + (double) beetrootLuck * 0.006))));
 		if (Math.random() < (0.0035 * (1d + (double) stackWheatLuck * 0.012))){
 			ItemStack beetroot = itemManager.stackBeetroot.clone();
 			drops.add(beetroot);

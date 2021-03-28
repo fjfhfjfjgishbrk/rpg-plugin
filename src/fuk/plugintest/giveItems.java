@@ -28,6 +28,7 @@ public class giveItems implements CommandExecutor {
 		items.put("stackhay", itemManager.stackHay);
 		items.put("stackwheat", itemManager.stackWheat);
 		items.put("testfiresword", itemManager.testFireSword);
+		items.put("testfiresword2", itemManager.testFireSwordt2);
 		items.put("stackbeetroot", itemManager.stackBeetroot);
 		items.put("crystalbeetroot", itemManager.crystalBeetroot);
 		items.put("liquidbeetroot", itemManager.liquidBeetroot);
@@ -42,7 +43,7 @@ public class giveItems implements CommandExecutor {
 				player.getInventory().addItem(items.get(args[0].toLowerCase()));
 			}
 		}
-		return false;
+		return true;
 	}
 
 }

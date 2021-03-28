@@ -22,6 +22,8 @@ import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import fuk.plugintest.mobs.MobManager;
+
 public class HealthBar implements Listener {
 	
 	public static HashMap <UUID, Integer> mobLevel = new HashMap<UUID, Integer>();
@@ -29,7 +31,7 @@ public class HealthBar implements Listener {
 	public static HashMap <UUID, Double> mobHealth = new HashMap<UUID, Double>();
 	public static HashMap <UUID, List<Player>> mobAttack = new HashMap<UUID, List<Player>>();
 	public static HashMap <String, Long> attackCooldown = new HashMap<String, Long>();
-	private Main plugin;
+	private static Main plugin;
 	
 	public HealthBar(Main plugin){
 		this.plugin = plugin;
@@ -55,6 +57,12 @@ public class HealthBar implements Listener {
 	public void entityDamage(EntityDamageByEntityEvent event) {
 		if (event.getEntity().isDead() || event.getEntity() instanceof ArmorStand || event.getEntity() instanceof Player){
 			return;
+		}
+		if (MobManager.changePhase.containsKey(event.getEntity().getUniqueId())){
+			if (MobManager.changePhase.get(event.getEntity().getUniqueId())){
+				event.setCancelled(true);
+				return;
+			}
 		}
 		double damageDealt = event.getDamage();
 		boolean crit = false;
@@ -93,12 +101,12 @@ public class HealthBar implements Listener {
 	}
 	
 	
-	public void barUpdate(Entity entity, double damage, boolean crit) {
+	public static void barUpdate(Entity entity, double damage, boolean crit) {
 		if (entity instanceof ArmorStand || entity instanceof Player) {
 			return;
 		}
 		if (entity instanceof LivingEntity) {
-			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable(){
+			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
 				public void run(){
 					LivingEntity spawnedMob = (LivingEntity) entity;
 					UUID mobID = spawnedMob.getUniqueId();
@@ -151,6 +159,10 @@ public class HealthBar implements Listener {
 					}
 					double maxHealth = mobMaxHealth.get(mobID);
 					
+					if (mobHealth.get(mobID) > maxHealth){
+						mobHealth.put(mobID, maxHealth);
+					}
+					
 					
 					if (!BossBarHealth.bossbar.containsKey(mobID)){
 						BossBarHealth.setHealthBar(spawnedMob, true);
@@ -170,6 +182,9 @@ public class HealthBar implements Listener {
 						mobHealth.remove(mobID);
 						BossBarHealth.bossbar.get(mobID).removeAll();
 						BossBarHealth.bossbar.remove(mobID);
+						if (MobManager.bossMobs.contains(mobID)){
+							MobManager.bossMobs.remove(mobID);
+						}
 					} 
 					else {
 						spawnedMob.setCustomName(ChatColor.BOLD + "[Lv." + level + "] " + ChatColor.RESET + getHealthColor(health, maxHealth) + df.format(health) + " / " + df.format(maxHealth));
@@ -203,7 +218,7 @@ public class HealthBar implements Listener {
 		}
 	}
 	
-	private ChatColor getHealthColor(double health, double maxHealth){
+	private static ChatColor getHealthColor(double health, double maxHealth){
 		double percent = health / maxHealth;
 		if (percent > 0.75){
 			return ChatColor.GREEN;

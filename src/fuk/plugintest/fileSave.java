@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
@@ -70,6 +71,7 @@ public class fileSave implements Listener {
     public static HashMap <String, Long> heal = new HashMap<String, Long>();
     public static HashMap <String, Integer> healBoost = new HashMap<String, Integer>();
     public static HashMap <String, Integer> healDuration = new HashMap<String, Integer>();
+    
     
     public static ArrayList<Location> blockbreak = new ArrayList<Location>();
     private static Main plugin;
@@ -367,9 +369,10 @@ public class fileSave implements Listener {
  	    Iterator<Entry<String, ArrayList<Integer>>> it = elementdefense.entrySet().iterator();
 	    while (it.hasNext()) {
 	        Map.Entry<String, ArrayList<Integer>> pair = (Map.Entry<String, ArrayList<Integer>>) it.next();
-	        getPlayerConfig().set("players.elementDefense", pair.getValue());
+	        getPlayerConfig().set("players." + pair.getKey() + ".elementDefense", pair.getValue());
 	        it.remove();
 	    }
+	    
  	    
  	    //---------------------------------
  	    //save block break location

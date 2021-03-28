@@ -23,6 +23,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 import fuk.plugintest.drops.customDrops;
+import fuk.plugintest.mobs.MobManager;
 
 public class experienceDisturbute implements Listener {
 	
@@ -51,14 +52,15 @@ public class experienceDisturbute implements Listener {
 		cropXp.put(Material.CACTUS, 1.4);
 		cropXp.put(Material.BROWN_MUSHROOM, 1.2);
 		cropXp.put(Material.BROWN_MUSHROOM_BLOCK, 1.2);
-		cropXp.put(Material.BROWN_MUSHROOM, 1.2);
-		cropXp.put(Material.BROWN_MUSHROOM_BLOCK, 1.2);
+		cropXp.put(Material.RED_MUSHROOM, 1.2);
+		cropXp.put(Material.RED_MUSHROOM_BLOCK, 1.2);
 		cropXp.put(Material.KELP, 0.1);
 		cropXp.put(Material.SEA_PICKLE, 1d);
 		cropXp.put(Material.NETHER_WART, 1.3);
 		noPlaceCrop.add(Material.MELON);
 		noPlaceCrop.add(Material.PUMPKIN);
 		noPlaceCrop.add(Material.SUGAR_CANE);
+		noPlaceCrop.add(Material.BAMBOO);
 		noPlaceCrop.add(Material.CACTUS);
 		noPlaceCrop.add(Material.SWEET_BERRY_BUSH);
 		noPlaceCrop.add(Material.BROWN_MUSHROOM);
@@ -79,6 +81,9 @@ public class experienceDisturbute implements Listener {
 		if (HealthBar.mobAttack.containsKey(mobId)){
 			int mobLevel = HealthBar.mobLevel.get(mobId);
 			experienceEarned = 1.5 * Math.pow(mobLevel, 1.26) * (0.9 + Math.random() * 0.2) * experiencePercent;
+			if (MobManager.bossExp.containsKey(mobId)){
+				experienceEarned = (double) MobManager.bossExp.get(mobId);
+			}
 			for (Player player : HealthBar.mobAttack.get(mobId)){
 				String playername = player.getName();
 				fileSave.expToNextAtkLvl.put(playername, Math.round(fileSave.expToNextAtkLvl.get(playername) + experienceEarned));
@@ -95,8 +100,8 @@ public class experienceDisturbute implements Listener {
 					player.sendMessage(ChatColor.AQUA + "----------------------------------------------------------");
 					player.sendMessage(ChatColor.BOLD.toString() + ChatColor.AQUA + "Congratulations on leveling up " + ChatColor.BOLD.toString() + ChatColor.BLUE + "Attack Skill!");
 					player.sendMessage(ChatColor.AQUA + "You are now level " + ChatColor.GOLD + Integer.toString(fileSave.attackLevel.get(playername)));
-					player.sendMessage(ChatColor.RED + "Your critical chance ✹ is now" + df.format(critChance / 10000) + "%");
-					player.sendMessage(ChatColor.RED + "Your dodge rate ↺ is now " + Double.toString(dodgeRate) + "%");
+					player.sendMessage(ChatColor.RED + "Your critical chance ✹ is now " + df.format((double) critChance / 10000d) + "%");
+					player.sendMessage(ChatColor.RED + "Your dodge rate ↺ is now " + df.format(dodgeRate) + "%");
 					player.sendMessage(ChatColor.GRAY + "Deal " + Integer.toString((int) (Math.pow(1.8, Math.pow((float) (fileSave.attackLevel.get(playername) - 1) / 10f, 0.5))*100) - 100) + "% more damage to mobs");
 				}
 				int levelPercent = (int) ((double) fileSave.expToNextAtkLvl.get(playername) / (double) fileSave.atkExpRequired.get(playername) * 100d);

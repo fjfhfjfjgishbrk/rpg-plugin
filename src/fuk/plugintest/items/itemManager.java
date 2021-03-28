@@ -29,6 +29,7 @@ public class itemManager {
 	YamlConfiguration uuidConfig;
 	
 	public static ItemStack testFireSword;
+	public static ItemStack testFireSwordt2;
 	
 	public static ItemStack cowSword;
 	public static ItemStack stackBeef;
@@ -57,6 +58,8 @@ public class itemManager {
 	public static ItemStack crystalBeetroot;
 	public static ItemStack liquidBeetroot;
 	public static ItemStack moistRoastBeetroot;
+	
+	
 	
 	public static ArrayList<ItemStack> noRightClick = new ArrayList<ItemStack>();
 	

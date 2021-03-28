@@ -5,6 +5,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import fuk.plugintest.enchants.EnchantManager;
 import fuk.plugintest.items.itemManager;
+import fuk.plugintest.mobs.MobManager;
+import fuk.plugintest.mobs.SummonMobs;
 import fuk.plugintest.recipes.recipeManager;
 
 public class Main extends JavaPlugin implements Listener{
@@ -30,10 +32,13 @@ public class Main extends JavaPlugin implements Listener{
 		new InventoryManager(this);
 		new EntityElementDefense(this);
 		new BossBarHealth(this);
+		new MobManager(this);
 		getCommand("ws").setExecutor(new walkSpeedCommand());
 		getCommand("atk").setExecutor(new atkCommand());
 		getCommand("giveitem").setExecutor(new giveItems());
 		getCommand("viewstats").setExecutor(new viewStatsCommand());
+		getCommand("playjames").setExecutor(new JamesCommand());
+		getCommand("spawnmob").setExecutor(new SummonMobs());
 	}
 	
 	@Override

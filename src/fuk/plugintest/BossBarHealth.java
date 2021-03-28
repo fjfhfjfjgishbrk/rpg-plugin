@@ -20,6 +20,8 @@ public class BossBarHealth {
 	
 	public static HashMap<UUID, BossBar> bossbar = new HashMap<UUID, BossBar>();
 	
+	public static HashMap<UUID, String> customName = new HashMap<UUID, String>();
+	
 	private static ArrayList<String> symbols = new ArrayList<String>();
 	private static ArrayList<Integer> nullDef = new ArrayList<Integer>();
 	
@@ -74,11 +76,17 @@ public class BossBarHealth {
 		else {
 			elementDef = nullDef;
 		}
+		if (EntityElementDefense.customElementDefense.containsKey(mobid)){
+			elementDef = EntityElementDefense.customElementDefense.get(mobid);
+		}
 		if (EntityElementDefense.elementAttack.containsKey(entity.getType())){
 			elementAtk = EntityElementDefense.elementAttack.get(entity.getType());
 		}
 		else {
 			elementAtk = nullDef;
+		}
+		if (EntityElementDefense.customElementAttack.containsKey(mobid)){
+			elementAtk = EntityElementDefense.customElementAttack.get(mobid);
 		}
 		DecimalFormat df = new DecimalFormat("###.#");
 		Boolean haveWeak = false;
@@ -87,7 +95,12 @@ public class BossBarHealth {
 		Integer count = 0;
 		String title = "";
 		title += ChatColor.WHITE + "[Lv. " + Integer.toString(level) + "] ";
-		title += ChatColor.YELLOW + StringUtils.capitalize(entity.getType().getName()) + "  ";
+		if (customName.containsKey(entity.getUniqueId())){
+			title += customName.get(entity.getUniqueId()) + "  ";
+		}
+		else {
+			title += ChatColor.YELLOW + StringUtils.capitalize(entity.getType().getName()) + "  ";
+		}
 		title += ChatColor.RED + df.format(health) + "♥  ";
 		title += ChatColor.GREEN + "Weak: ";
 		for (Integer def: elementDef){

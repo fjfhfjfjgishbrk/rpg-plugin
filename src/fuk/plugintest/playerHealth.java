@@ -68,6 +68,8 @@ public class playerHealth implements Listener {
 					String playername = player.getName();
 					if (!player.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)){
 						player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100000000, 6, false, false));
+					}
+					if (!player.hasPotionEffect(PotionEffectType.SATURATION)){
 						player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 100000000, 6, false, false));
 					}
 					int health = fileSave.health.get(playername);

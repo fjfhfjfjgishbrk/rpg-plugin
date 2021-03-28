@@ -34,11 +34,22 @@ public class playerDamage implements Listener {
 		if (!(event.getDamager() instanceof LivingEntity)){
 			return;
 		}
+		if (event.getDamager() instanceof Player){
+			Player player = (Player) event.getDamager();
+			Player hitPlayer = (Player) event.getEntity();
+			player.sendMessage(ChatColor.DARK_RED + "WHY YOU HRUT PEOPLE OMG WTF??!??!?!??!");
+			hitPlayer.sendMessage(ChatColor.YELLOW + "Ha you get hit noob lol");
+			event.setCancelled(true);
+			return;
+		}
 		LivingEntity attackEntity = (LivingEntity) event.getDamager();
 		Player player = (Player) event.getEntity();
 		String playername = player.getName();
 		ArrayList<Integer> elementDefense = fileSave.elementdefense.get(playername);
 		ArrayList<Integer> elementAttack = EntityElementDefense.elementAttack.get(attackEntity.getType());
+		if (EntityElementDefense.customElementAttack.containsKey(attackEntity.getUniqueId())){
+			elementAttack = EntityElementDefense.customElementAttack.get(attackEntity.getUniqueId());
+		}
 		int dodgeLvl = fileSave.dodge.get(playername);
 		if (fileSave.dodge.containsKey(playername)){
 			dodgeLvl += fileSave.dodge.get(playername);
@@ -63,13 +74,13 @@ public class playerDamage implements Listener {
 			else if (def > 0){
 				damage += baseAtk * ((double) atk / 150d) * (1d - def / (double) (175 + def));
 			}
+			else {
+				damage += baseAtk * ((double) atk / 150d);
+			}
 		}
 		
 		double damageTaken = damage * (double) attackLvl + Math.pow(2d, Math.pow(attackLvl, 1/3.3));
-		System.out.println(Double.toString(damageTaken));
 		damageTaken *= (1d - (double) defense / (double) (100d + defense));
-		System.out.println(Double.toString(damageTaken));
-		System.out.println(Double.toString(1d - (double) defense / (double) (150d + defense)));
 		
 		
 		//--------------------------------
@@ -84,6 +95,8 @@ public class playerDamage implements Listener {
 		}
 		
 		updatePlayerHealth(player, health, maxHealth, damageTaken);
+		
+		player.setNoDamageTicks(1);
 	}
 	
 	@EventHandler
