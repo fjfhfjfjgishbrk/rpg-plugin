@@ -44,7 +44,7 @@ public class CowItems {
 			meta.addEnchant(Enchantment.LUCK, 1, false);
 			meta.setUnbreakable(true);
 			meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(cowswordID, "generic.attackSpeed", 10, AttributeModifier.Operation.ADD_NUMBER));
+			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(cowswordID, "generic.attackSpeed", 100, AttributeModifier.Operation.ADD_NUMBER));
 			meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "elementDamage"), PersistentDataType.INTEGER_ARRAY, new int[]{0, 0, 0, 30, 0, 0});

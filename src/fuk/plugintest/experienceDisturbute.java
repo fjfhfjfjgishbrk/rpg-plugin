@@ -30,12 +30,14 @@ public class experienceDisturbute implements Listener {
 	private Main plugin;
 	
 	private static HashMap<Material, Double> cropXp = new HashMap<Material, Double>();
+	private static HashMap<Material, Double> oreXp = new HashMap<Material, Double>();
 	private static ArrayList<Material> noPlaceCrop = new ArrayList<Material>();
 	
 	public experienceDisturbute(Main plugin){
 		this.plugin = plugin;
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 		addCropBlocks();
+		addOreBlocks();
 	}
 	
 	private void addCropBlocks(){
@@ -69,6 +71,32 @@ public class experienceDisturbute implements Listener {
 		noPlaceCrop.add(Material.KELP);
 	}
 	
+	private void addOreBlocks(){
+		oreXp.put(Material.STONE, 0.003);
+		oreXp.put(Material.ANDESITE, 0.007);
+		oreXp.put(Material.DIORITE, 0.007);
+		oreXp.put(Material.GRANITE, 0.007);
+		oreXp.put(Material.TERRACOTTA, 0.004);
+		oreXp.put(Material.BASALT, 0.012);
+		oreXp.put(Material.BLACKSTONE, 0.012);
+		oreXp.put(Material.GLOWSTONE, 2d);
+		oreXp.put(Material.END_STONE, 0.015);
+		oreXp.put(Material.NETHERRACK, 0.002);
+		oreXp.put(Material.COAL_ORE, 1d);
+		oreXp.put(Material.IRON_ORE, 10d);
+		oreXp.put(Material.LAPIS_ORE, 25d);
+		oreXp.put(Material.GOLD_ORE, 40d);
+		oreXp.put(Material.REDSTONE_ORE, 30d);
+		oreXp.put(Material.DIAMOND_ORE, 100d);
+		oreXp.put(Material.EMERALD_ORE, 120d);
+		oreXp.put(Material.QUARTZ, 2d);
+		oreXp.put(Material.NETHER_GOLD_ORE, 15d);
+		oreXp.put(Material.ANCIENT_DEBRIS, 200d);
+		for (Material m: oreXp.keySet()){
+			noPlaceCrop.add(m);
+		}
+	}
+	
 	@EventHandler
 	public void entityDeath(EntityDeathEvent event){
 		if (event.getEntity() instanceof ArmorStand || event.getEntity() instanceof Player){
@@ -87,7 +115,7 @@ public class experienceDisturbute implements Listener {
 			for (Player player : HealthBar.mobAttack.get(mobId)){
 				String playername = player.getName();
 				fileSave.expToNextAtkLvl.put(playername, Math.round(fileSave.expToNextAtkLvl.get(playername) + experienceEarned));
-				if (fileSave.expToNextAtkLvl.get(playername) > fileSave.atkExpRequired.get(playername)){
+				while (fileSave.expToNextAtkLvl.get(playername) > fileSave.atkExpRequired.get(playername)){
 					fileSave.expToNextAtkLvl.put(playername, fileSave.expToNextAtkLvl.get(playername) - fileSave.atkExpRequired.get(playername));
 					fileSave.attackLevel.put(playername, fileSave.attackLevel.get(playername) + 1);
 					fileSave.atkExpRequired.put(playername, fileSave.CalculateExpReqiuired(fileSave.attackLevel.get(playername)));
@@ -100,8 +128,8 @@ public class experienceDisturbute implements Listener {
 					player.sendMessage(ChatColor.AQUA + "----------------------------------------------------------");
 					player.sendMessage(ChatColor.BOLD.toString() + ChatColor.AQUA + "Congratulations on leveling up " + ChatColor.BOLD.toString() + ChatColor.BLUE + "Attack Skill!");
 					player.sendMessage(ChatColor.AQUA + "You are now level " + ChatColor.GOLD + Integer.toString(fileSave.attackLevel.get(playername)));
-					player.sendMessage(ChatColor.RED + "Your critical chance ✹ is now " + df.format((double) critChance / 10000d) + "%");
-					player.sendMessage(ChatColor.RED + "Your dodge rate ↺ is now " + df.format(dodgeRate) + "%");
+					player.sendMessage(ChatColor.RED + "Your base critical chance ✹ is now " + df.format((double) critChance / 10000d) + "%");
+					player.sendMessage(ChatColor.RED + "Your base dodge rate ↺ is now " + df.format(dodgeRate) + "%");
 					player.sendMessage(ChatColor.GRAY + "Deal " + Integer.toString((int) (Math.pow(1.8, Math.pow((float) (fileSave.attackLevel.get(playername) - 1) / 10f, 0.5))*100) - 100) + "% more damage to mobs");
 				}
 				int levelPercent = (int) ((double) fileSave.expToNextAtkLvl.get(playername) / (double) fileSave.atkExpRequired.get(playername) * 100d);
@@ -131,13 +159,12 @@ public class experienceDisturbute implements Listener {
 	}
 	
 	@EventHandler
-	public void breakBlocks(BlockBreakEvent event){
+	public static void breakBlocks(BlockBreakEvent event){
 		Block blockBroken = event.getBlock();
 		if (fileSave.blockbreak.contains(blockBroken.getLocation())){
 			fileSave.blockbreak.remove(blockBroken.getLocation());
 			return;
 		}
-		event.setDropItems(false);
 		if (cropXp.containsKey(blockBroken.getType())){
 			if (blockBroken.getBlockData() instanceof Ageable){
 				if (!(((Ageable) blockBroken.getBlockData()).getAge() == ((Ageable) blockBroken.getBlockData()).getMaximumAge())){
@@ -147,9 +174,9 @@ public class experienceDisturbute implements Listener {
 			String playername = event.getPlayer().getName();
 			Player player = event.getPlayer();
 			int farmlvl = fileSave.farmLevel.get(playername);
-			double experienceEarned = Math.ceil(1.9 * Math.pow(farmlvl, 1.15) * cropXp.get(blockBroken.getType()));
+			double experienceEarned = Math.ceil(1.6 * Math.pow(farmlvl, 1.15) * cropXp.get(blockBroken.getType()));
 			fileSave.expToNextFarmLvl.put(playername, (long) (fileSave.expToNextFarmLvl.get(playername) + experienceEarned));
-			if (fileSave.expToNextFarmLvl.get(playername) > fileSave.farmExpRequired.get(playername)){
+			while (fileSave.expToNextFarmLvl.get(playername) > fileSave.farmExpRequired.get(playername)){
 				fileSave.expToNextFarmLvl.put(playername, fileSave.expToNextFarmLvl.get(playername) - fileSave.farmExpRequired.get(playername));
 				fileSave.farmLevel.put(playername, fileSave.farmLevel.get(playername) + 1);
 				fileSave.farmExpRequired.put(playername, fileSave.CalculateExpReqiuired(fileSave.farmLevel.get(playername)));
@@ -168,6 +195,39 @@ public class experienceDisturbute implements Listener {
 			List<ItemStack> dropList = customDrops.getCropDrops(event.getBlock().getType(), player);
 			for (ItemStack item: dropList){
 				player.getInventory().addItem(item);
+			}
+			event.setDropItems(false);
+		}
+		else if (oreXp.containsKey(blockBroken.getType())){
+			String playername = event.getPlayer().getName();
+			Player player = event.getPlayer();
+			int deflvl = fileSave.defenseLevel.get(playername);
+			double experienceEarned = Math.ceil(1.8 * Math.pow(deflvl, 1.13) * oreXp.get(blockBroken.getType()));
+			fileSave.expToNextDefLvl.put(playername, (long) (fileSave.expToNextDefLvl.get(playername) + experienceEarned));
+			while (fileSave.expToNextDefLvl.get(playername) > fileSave.defExpRequired.get(playername)){
+				fileSave.expToNextDefLvl.put(playername, fileSave.expToNextDefLvl.get(playername) - fileSave.defExpRequired.get(playername));
+				fileSave.defenseLevel.put(playername, fileSave.defenseLevel.get(playername) + 1);
+				fileSave.defExpRequired.put(playername, fileSave.CalculateExpReqiuired(fileSave.farmLevel.get(playername)));
+				fileSave.defense.put(playername, fileSave.defense.get(playername) + 1);
+				fileSave.attackSpeed.put(playername, fileSave.attackSpeed.get(playername) + 1);
+				DecimalFormat df = new DecimalFormat("###.##");
+				player.sendMessage(ChatColor.AQUA + "----------------------------------------------------------");
+				player.sendMessage(ChatColor.BOLD.toString() + ChatColor.AQUA + "Congratulations on leveling up " + ChatColor.BOLD.toString() + ChatColor.BLUE + "Mining Skill!");
+				player.sendMessage(ChatColor.AQUA + "You are now level " + ChatColor.GOLD + Integer.toString(fileSave.farmLevel.get(playername)));
+				player.sendMessage(ChatColor.RED + "Your base defense is now " + Integer.toString(fileSave.maxHealth.get(playername)) + "※");
+				player.sendMessage(ChatColor.RED + "You can attack " + df.format(1000d / (double) (500d - 9.6 * Math.pow(fileSave.attackSpeed.get(playername), 0.4))) + " times per second");
+			}
+			int levelPercent = (int) ((double) fileSave.expToNextDefLvl.get(playername) / (double) fileSave.defExpRequired.get(playername) * 100d);
+			player.sendMessage(ChatColor.AQUA + "+" + Integer.toString((int) Math.round(experienceEarned)) + " mining xp " + ChatColor.GOLD + "[" + Integer.toString(levelPercent) + "%]");
+			List<ItemStack> dropList = customDrops.getOreDrops(event.getBlock().getType(), player);
+			for (ItemStack item: dropList){
+				player.getInventory().addItem(item);
+			}
+			event.setDropItems(false);
+		}
+		if (event.isDropItems()){
+			for (ItemStack item: blockBroken.getDrops(event.getPlayer().getEquipment().getItemInMainHand())){
+				event.getPlayer().getInventory().addItem(item);
 			}
 		}
 	}

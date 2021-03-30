@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.UUID;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
@@ -71,6 +70,7 @@ public class fileSave implements Listener {
     public static HashMap <String, Long> heal = new HashMap<String, Long>();
     public static HashMap <String, Integer> healBoost = new HashMap<String, Integer>();
     public static HashMap <String, Integer> healDuration = new HashMap<String, Integer>();
+    public static HashMap <String, Integer> miningSpeed = new HashMap<String, Integer>();
     
     
     public static ArrayList<Location> blockbreak = new ArrayList<Location>();
@@ -246,7 +246,9 @@ public class fileSave implements Listener {
  	 	
  	 	mana.put(playername, fishLevel.get(playername));
  	 	
- 	 	attackSpeed.put(playername, attackLevel.get(playername));
+ 	 	attackSpeed.put(playername, defenseLevel.get(playername));
+ 	 	
+ 	 	miningSpeed.put(playername, defenseLevel.get(playername));
  	 	
  	 	//-------------------------------
  	 	//read boosts

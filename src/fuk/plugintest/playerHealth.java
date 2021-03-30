@@ -1,6 +1,7 @@
 package fuk.plugintest;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
@@ -45,6 +46,18 @@ public class playerHealth implements Listener {
 		return boosts;
 	}
 	
+	private ArrayList<Integer> checkEleDef(ItemStack item, ArrayList<Integer> eledef){
+		NamespacedKey eleDefTag = new NamespacedKey(plugin, "elementDefense");
+		if (item.getItemMeta().getPersistentDataContainer().has(eleDefTag, PersistentDataType.INTEGER)){
+			int a[] = item.getItemMeta().getPersistentDataContainer().get(eleDefTag, PersistentDataType.INTEGER_ARRAY);
+			eledef.clear();
+			for (int b: a){
+				eledef.add(b);
+			}
+		}
+		return eledef;
+	}
+	
 	private Integer setBoosts(Player player, HashMap<String, Integer> boost, HashMap<String, Integer> durationMap, int stat){
 		String playername = player.getName();
 		if (boost.containsKey(playername)){
@@ -72,6 +85,9 @@ public class playerHealth implements Listener {
 					if (!player.hasPotionEffect(PotionEffectType.SATURATION)){
 						player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 100000000, 6, false, false));
 					}
+					if (!player.hasPotionEffect(PotionEffectType.SLOW_DIGGING)){
+						player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 100000000, 3, false, false));
+					}
 					int health = fileSave.health.get(playername);
 					int maxHealth = fileSave.maxHealth.get(playername);
 					int defense = fileSave.defense.get(playername);
@@ -92,6 +108,10 @@ public class playerHealth implements Listener {
 					
 					// atk, def, dodge
 					int boost[] = new int[]{0, 0, 0};
+					ArrayList<Integer> eleDefBoost = new ArrayList<Integer>();
+					for (int i = 0; i < 6; i++){
+						eleDefBoost.add(0);
+					}
 					
 					
 					//chestplate
@@ -99,6 +119,7 @@ public class playerHealth implements Listener {
 					
 					if (chestplate != null){
 						boost = checkTags(chestplate, boost);
+						eleDefBoost = checkEleDef(chestplate, eleDefBoost);
 					}
 					
 					//enchant buff
@@ -113,7 +134,7 @@ public class playerHealth implements Listener {
 					fileSave.walkSpeed.put(playername, speed);
 					fileSave.heal.put(playername, heal);
 					
-					
+					fileSave.elementdefense.put(playername, eleDefBoost);
 					
 					//-------------------------
 					//looking for custom item buffs

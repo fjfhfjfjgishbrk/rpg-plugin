@@ -61,8 +61,8 @@ public class ItemsWheat {
 			meta.addEnchant(Enchantment.LUCK, 1, false);
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 			item.setItemMeta(meta);
-			itemManager.stackHay = item;
 			itemManager.noRightClick.add(itemManager.stackHay);
+			itemManager.stackHay = item;
 		}
 		
 		//very stack hay
@@ -76,8 +76,8 @@ public class ItemsWheat {
 			meta.addEnchant(Enchantment.LUCK, 1, false);
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 			item.setItemMeta(meta);
-			itemManager.exStackHay = item;
 			itemManager.noRightClick.add(itemManager.exStackHay);
+			itemManager.exStackHay = item;
 		}
 		
 		//processed bread
@@ -151,7 +151,7 @@ public class ItemsWheat {
 			meta.setLore(lore);
 			meta.addEnchant(Enchantment.LUCK, 1, false);
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "recover"), PersistentDataType.INTEGER, 800);
+			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "recover"), PersistentDataType.INTEGER, 3200);
 			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "walkBuff"), PersistentDataType.INTEGER_ARRAY, new int[]{1200, 2100});
 			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "dodgeBuff"), PersistentDataType.INTEGER_ARRAY, new int[]{650, 1800});
 			item.setItemMeta(meta);

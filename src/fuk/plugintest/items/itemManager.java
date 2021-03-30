@@ -3,20 +3,11 @@ package fuk.plugintest.items;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.UUID;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 
 import fuk.plugintest.Main;
 import fuk.plugintest.giveItems;
@@ -28,8 +19,11 @@ public class itemManager {
 	File uuidFile;
 	YamlConfiguration uuidConfig;
 	
+	private static HashMap<String, ItemStack> items = new HashMap<String, ItemStack>();
+	
 	public static ItemStack testFireSword;
 	public static ItemStack testFireSwordt2;
+	public static ItemStack testPickaxe;
 	
 	public static ItemStack cowSword;
 	public static ItemStack stackBeef;
@@ -39,6 +33,7 @@ public class itemManager {
 	public static ItemStack cowChestplateT2;
 	public static ItemStack milkCatalyst;
 	
+	//farming items
 	public static ItemStack stackWheat;
 	public static ItemStack exStackWheat;
 	public static ItemStack stackHay;
@@ -59,7 +54,29 @@ public class itemManager {
 	public static ItemStack liquidBeetroot;
 	public static ItemStack moistRoastBeetroot;
 	
+	public static ItemStack stackCarrot;
+	public static ItemStack exStackCarrot;
+	public static ItemStack stackGoldCarrot;
+	public static ItemStack exStackGoldCarrot;
 	
+	//mining items
+	public static ItemStack stackGold;
+	public static ItemStack exStackGold;
+	public static ItemStack stackGoldBlock;
+	public static ItemStack exStackGoldBlock;
+	public static ItemStack goldSword;
+	public static ItemStack goldSwordT2;
+	public static ItemStack goldAxe;
+	public static ItemStack goldHoe;
+	public static ItemStack goldPick;
+	public static ItemStack goldHelmet;
+	public static ItemStack goldChestplate;
+	public static ItemStack goldLeggings;
+	public static ItemStack goldBoots;
+	public static ItemStack goldHelmetT2;
+	public static ItemStack goldChestplateT2;
+	public static ItemStack goldLeggingsT2;
+	public static ItemStack goldBootsT2;
 	
 	public static ArrayList<ItemStack> noRightClick = new ArrayList<ItemStack>();
 	
@@ -113,6 +130,5 @@ public class itemManager {
 		}
 		return uuid;
 	}
-	
 	
 }

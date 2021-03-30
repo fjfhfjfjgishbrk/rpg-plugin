@@ -31,7 +31,7 @@ public class Cow {
 	@SuppressWarnings("deprecation")
 	private void recipeStackCookedBeef(){
 		ItemStack item = itemManager.stackCookedBeef;
-		ItemStack beef = itemManager.stackBeef.clone();
+		ItemStack beef = itemManager.stackBeef;
 		beef.setAmount(8);
 		ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "stackCookedBeef"), item);
 		recipe.shape("aaa", "aaa", "aaa");
@@ -43,8 +43,8 @@ public class Cow {
 	@SuppressWarnings("deprecation")
 	private void recipeCowChestplate(){
 		ItemStack item = itemManager.cowChestplate;
-		ItemStack beef = itemManager.stackCookedBeef.clone();
-		ItemStack milk = itemManager.godMilk.clone();
+		ItemStack beef = itemManager.stackCookedBeef;
+		ItemStack milk = itemManager.godMilk;
 		ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "cowChestplate"), item);
 		recipe.shape("a a", "aba", "aaa");
 		recipe.setIngredient('a', new RecipeChoice.ExactChoice(beef));
@@ -56,10 +56,10 @@ public class Cow {
 	@SuppressWarnings("deprecation")
 	private void recipeCowChestplateT2(){
 		ItemStack item = itemManager.cowChestplateT2;
-		ItemStack beef = itemManager.stackCookedBeef.clone();
-		ItemStack milk = itemManager.godMilk.clone();
-		ItemStack chest = itemManager.cowChestplate.clone();
-		ItemStack cata = itemManager.milkCatalyst.clone();
+		ItemStack beef = itemManager.stackCookedBeef;
+		ItemStack milk = itemManager.godMilk;
+		ItemStack chest = itemManager.cowChestplate;
+		ItemStack cata = itemManager.milkCatalyst;
 		ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "cowChestplateT2"), item);
 		recipe.shape("a a", "bcb", "ada");
 		recipe.setIngredient('a', new RecipeChoice.ExactChoice(beef));

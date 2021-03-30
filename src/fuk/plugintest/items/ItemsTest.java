@@ -40,7 +40,7 @@ public class ItemsTest {
 		meta.addEnchant(Enchantment.LUCK, 1, false);
 		meta.setUnbreakable(true);
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-		meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(testUUID, "generic.attackSpeed", 10, AttributeModifier.Operation.ADD_NUMBER));
+		meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(testUUID, "generic.attackSpeed", 100, AttributeModifier.Operation.ADD_NUMBER));
 		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "elementDamage"), PersistentDataType.INTEGER_ARRAY, new int[]{30, 0, 0, 0, 0, 0});
@@ -62,7 +62,7 @@ public class ItemsTest {
 		meta.addEnchant(Enchantment.LUCK, 1, false);
 		meta.setUnbreakable(true);
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-		meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(testUUID, "generic.attackSpeed", 10, AttributeModifier.Operation.ADD_NUMBER));
+		meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(testUUID, "generic.attackSpeed", 100, AttributeModifier.Operation.ADD_NUMBER));
 		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "elementDamage"), PersistentDataType.INTEGER_ARRAY, new int[]{120, 0, 0, 0, 0, 0});
@@ -71,8 +71,28 @@ public class ItemsTest {
 		itemManager.testFireSwordt2 = item;
 	}
 	
+	private static void createTestPickaxe(){
+		ItemStack item = new ItemStack(Material.DIAMOND_PICKAXE, 1);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(ChatColor.GOLD + "Test Pickaxe");
+		List<String> lore = new ArrayList<>();
+		lore.add(ChatColor.GRAY + "Mining Speed: " + ChatColor.YELLOW + "+2500");
+		lore.add("");
+		lore.add(ChatColor.DARK_RED + "This item is used for testing");
+		meta.setLore(lore);
+		meta.addEnchant(Enchantment.LUCK, 1, false);
+		meta.setUnbreakable(true);
+		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "miningspeed"), PersistentDataType.INTEGER, 2500);
+		item.setItemMeta(meta);
+		itemManager.testPickaxe = item;
+	}
+	
 	public static void initTestItems(){
 		createTestFireSword();
 		createTestFireSword2();
+		createTestPickaxe();
 	}
 }

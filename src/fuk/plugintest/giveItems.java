@@ -29,6 +29,7 @@ public class giveItems implements CommandExecutor {
 		items.put("stackwheat", itemManager.stackWheat);
 		items.put("testfiresword", itemManager.testFireSword);
 		items.put("testfiresword2", itemManager.testFireSwordt2);
+		items.put("testpickaxe", itemManager.testPickaxe);
 		items.put("stackbeetroot", itemManager.stackBeetroot);
 		items.put("crystalbeetroot", itemManager.crystalBeetroot);
 		items.put("liquidbeetroot", itemManager.liquidBeetroot);

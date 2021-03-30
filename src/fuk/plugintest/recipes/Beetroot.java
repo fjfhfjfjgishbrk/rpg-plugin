@@ -32,7 +32,7 @@ private Main plugin;
 	@SuppressWarnings("deprecation")
 	private void recipeExStackBeetroot(){
 		ItemStack item = itemManager.exStackBeetroot;
-		ItemStack beetroot = itemManager.stackBeetroot.clone();
+		ItemStack beetroot = itemManager.stackBeetroot;
 		ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "exStackBeetroot"), item);
 		recipe.shape("aaa", "aaa", "aaa");
 		recipe.setIngredient('a', new RecipeChoice.ExactChoice(beetroot));
@@ -42,7 +42,7 @@ private Main plugin;
 	@SuppressWarnings("deprecation")
 	private void recipeExSinguBeetroot(){
 		ItemStack item = itemManager.beetrootSingularity;
-		ItemStack beetroot = itemManager.exStackBeetroot.clone();
+		ItemStack beetroot = itemManager.exStackBeetroot;
 		ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(plugin, "beetrootSingularity"), item);
 		recipe.shape("aaa", "aaa", "aaa");
 		recipe.setIngredient('a', new RecipeChoice.ExactChoice(beetroot));
@@ -52,7 +52,7 @@ private Main plugin;
 	@SuppressWarnings("deprecation")
 	private void recipeRoastBeetroot(){
 		ItemStack item = itemManager.roastedBeetroot;
-		ItemStack beetroot = itemManager.stackBeetroot.clone();
+		ItemStack beetroot = itemManager.stackBeetroot;
 		FurnaceRecipe recipe = new FurnaceRecipe(new NamespacedKey(plugin, "roastedBeetroot"), item, new RecipeChoice.ExactChoice(beetroot), 0f, 600);
 		plugin.getServer().addRecipe(recipe);
 	}
@@ -60,8 +60,8 @@ private Main plugin;
 	@SuppressWarnings("deprecation")
 	private void recipeMoistRoastBeetroot(){
 		ItemStack item = itemManager.moistRoastBeetroot;
-		ItemStack beetroot = itemManager.roastedBeetroot.clone();
-		ItemStack wetBeetroot = itemManager.liquidBeetroot.clone();
+		ItemStack beetroot = itemManager.roastedBeetroot;
+		ItemStack wetBeetroot = itemManager.liquidBeetroot;
 		ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(plugin, "moistRoastBeetroot"), item);
 		recipe.addIngredient(new RecipeChoice.ExactChoice(beetroot));
 		recipe.addIngredient(new RecipeChoice.ExactChoice(wetBeetroot));

@@ -4,6 +4,7 @@ name: RPG_Plugin
 version: 1.0
 author: me
 description: I test yay
+depend: [ProtocolLib]
 commands: 
   ws: 
     description: set walkspeed

@@ -29,7 +29,6 @@ import fuk.plugintest.HealthBar;
 import fuk.plugintest.Main;
 import net.minecraft.server.v1_16_R3.EntityCreature;
 import net.minecraft.server.v1_16_R3.EntityHuman;
-import net.minecraft.server.v1_16_R3.EntityLiving;
 import net.minecraft.server.v1_16_R3.EntityTypes;
 import net.minecraft.server.v1_16_R3.EntityZombie;
 import net.minecraft.server.v1_16_R3.EnumItemSlot;
