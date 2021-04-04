@@ -138,13 +138,14 @@ public class playerHealth implements Listener {
 					
 					//-------------------------
 					//looking for custom item buffs
+					NamespacedKey nameTag = new NamespacedKey(plugin, "name");
 					
 					//chestplate buff
 					if (chestplate != null){
-						if (chestplate.equals(itemManager.cowChestplate)){
+						if (chestplate.getItemMeta().getPersistentDataContainer().get(nameTag, PersistentDataType.STRING) == "cowchest"){
 							health += (int) ((float) maxHealth * 0.01) * healpercent;
 						}
-						else if (chestplate.equals(itemManager.cowChestplateT2)){
+						else if (chestplate.getItemMeta().getPersistentDataContainer().get(nameTag, PersistentDataType.STRING) == "cowchest2"){
 							health += (int) ((float) maxHealth * 0.03) * healpercent;
 						}
 					}

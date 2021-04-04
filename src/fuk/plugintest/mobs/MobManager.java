@@ -28,6 +28,7 @@ public class MobManager {
 	public static HashMap<UUID, Integer> bossExp = new HashMap<UUID, Integer>();
 	public static HashMap<UUID, Integer> phase = new HashMap<UUID, Integer>();
 	public static HashMap<UUID, Boolean> changePhase = new HashMap<UUID, Boolean>();
+	public static ArrayList<UUID> noKill = new ArrayList<UUID>();
 	
 	public MobManager(Main plugin){
 		this.plugin = plugin;

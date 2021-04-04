@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
+import fuk.plugintest.anvil.AnvilManager;
 import fuk.plugintest.enchants.EnchantManager;
 import fuk.plugintest.items.itemManager;
 import fuk.plugintest.mining.MiningManager;
@@ -41,6 +42,7 @@ public class Main extends JavaPlugin implements Listener{
 		new BossBarHealth(this);
 		new MobManager(this);
 		new MiningManager(this, protocolManager);
+		new AnvilManager(this);
 		getCommand("ws").setExecutor(new walkSpeedCommand());
 		getCommand("atk").setExecutor(new atkCommand());
 		getCommand("giveitem").setExecutor(new giveItems());

@@ -433,6 +433,9 @@ public class fileSave implements Listener {
  	private static void loadLevelStuff(Player player, String skill, HashMap<String, Integer> level, HashMap<String, Long> expHas, HashMap<String, Long> expNeed){
  		FileConfiguration playerConfig = getPlayerConfig();
  		String playername = player.getName();
+ 		if (level.containsKey(playername)){
+ 			return;
+ 		}
  		int playerlevel = Integer.valueOf(String.valueOf(customConfig.get("players." + playername + "." + skill + ".level", -1)));
  		if (!(playerlevel < 0)){
  			level.put(playername, playerlevel);
@@ -457,6 +460,9 @@ public class fileSave implements Listener {
 
  	private static void loadBoosts(Player player, HashMap<String, Integer> duration, HashMap<String, Integer> boost, String skill){
  		String playername = player.getName();
+ 		if (duration.containsKey(playername)){
+ 			return;
+ 		}
  		int boostAmount = Integer.valueOf(String.valueOf(customConfig.get("players." + playername + "." + skill + ".boost.amount", -1)));
  	 	if (boostAmount != -1){
  	 		duration.put(playername, Integer.valueOf(String.valueOf(customConfig.get("players." + playername + "." + skill + ".boost.duration"))));

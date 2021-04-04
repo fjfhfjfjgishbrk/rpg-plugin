@@ -78,7 +78,19 @@ public class itemManager {
 	public static ItemStack goldLeggingsT2;
 	public static ItemStack goldBootsT2;
 	
+	//gems
+	public static ItemStack fireGem;
+	public static ItemStack waterGem;
+	public static ItemStack iceGem;
+	public static ItemStack earthGem;
+	public static ItemStack thunderGem;
+	public static ItemStack magicGem;
+	
+	
 	public static ArrayList<ItemStack> noRightClick = new ArrayList<ItemStack>();
+	public static ArrayList<ItemStack> gems = new ArrayList<ItemStack>();
+	public static ArrayList<String> canUpgrade = new ArrayList<String>();
+	public static ArrayList<String> sword = new ArrayList<String>();
 	
 	public itemManager(Main plugin){
 		this.plugin = plugin;
@@ -86,6 +98,7 @@ public class itemManager {
 		new ItemsWheat(plugin);
 		new ItemsTest(plugin);
 		new ItemsBeetroot(plugin);
+		new ItemsGems(plugin);
 		readUUID();
 	}
 	
@@ -94,6 +107,7 @@ public class itemManager {
 		ItemsWheat.initWheat();
 		ItemsTest.initTestItems();
 		ItemsBeetroot.initBeet();
+		ItemsGems.init();
 		
 		giveItems.init();
 	}

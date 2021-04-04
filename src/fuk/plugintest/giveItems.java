@@ -34,6 +34,12 @@ public class giveItems implements CommandExecutor {
 		items.put("crystalbeetroot", itemManager.crystalBeetroot);
 		items.put("liquidbeetroot", itemManager.liquidBeetroot);
 		items.put("roastbeetroot", itemManager.roastedBeetroot);
+		items.put("firegem", itemManager.fireGem);
+		items.put("watergem", itemManager.waterGem);
+		items.put("icegem", itemManager.iceGem);
+		items.put("earthgem", itemManager.earthGem);
+		items.put("thundergem", itemManager.thunderGem);
+		items.put("magicgem", itemManager.magicGem);
 	}
 	
 	@Override

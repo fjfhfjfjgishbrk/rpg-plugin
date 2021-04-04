@@ -163,6 +163,11 @@ public class HealthBar implements Listener {
 						mobHealth.put(mobID, maxHealth);
 					}
 					
+					if (MobManager.noKill.contains(mobID) && mobHealth.get(mobID) < 0){
+						mobHealth.put(mobID, 1000d);
+						health = 1000;
+					}
+					
 					
 					if (!BossBarHealth.bossbar.containsKey(mobID)){
 						BossBarHealth.setHealthBar(spawnedMob, true);

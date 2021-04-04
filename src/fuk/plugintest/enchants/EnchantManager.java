@@ -106,7 +106,7 @@ public class EnchantManager implements Listener{
 	
 	
 	@EventHandler
-	public void clickEnchantTable(PlayerInteractEvent event){
+	private void clickEnchantTable(PlayerInteractEvent event){
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.ENCHANTING_TABLE){
 			event.setCancelled(true);
 			event.getPlayer().openInventory(InventoryManager.enchantMenu.get(event.getPlayer().getName()).get(0));
@@ -115,7 +115,7 @@ public class EnchantManager implements Listener{
 	
 	
 	@EventHandler
-	public void clickInventory(InventoryClickEvent event){
+	private void clickInventory(InventoryClickEvent event){
 		if (event.getAction() == InventoryAction.PICKUP_ALL){
 			String name = event.getWhoClicked().getName();
 			if (InventoryManager.enchantMenu.get(name).contains(event.getInventory())){

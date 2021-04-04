@@ -32,7 +32,7 @@ public class ItemsTest {
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(ChatColor.GOLD + "Fire test sword");
 		List<String> lore = new ArrayList<>();
-		lore.add(ChatColor.GRAY + "Damage: " + ChatColor.RED + "+30♦");
+		lore.add(ChatColor.GRAY + "Damage: " + ChatColor.RED + "30♦");
 		lore.add(ChatColor.GRAY + "Strength: " + ChatColor.RED + "+20");
 		lore.add("");
 		lore.add(ChatColor.DARK_RED + "This item is used for testing");
@@ -45,8 +45,11 @@ public class ItemsTest {
 		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "elementDamage"), PersistentDataType.INTEGER_ARRAY, new int[]{30, 0, 0, 0, 0, 0});
 		meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "strength"), PersistentDataType.INTEGER, 20);
+		meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "name"), PersistentDataType.STRING, "testfiresword");
 		item.setItemMeta(meta);
 		itemManager.testFireSword = item;
+		itemManager.canUpgrade.add("testfiresword");
+		itemManager.sword.add("testfiresword");
 	}
 	
 	private static void createTestFireSword2(){
@@ -54,7 +57,7 @@ public class ItemsTest {
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(ChatColor.GOLD + "Fire test sword tier 2");
 		List<String> lore = new ArrayList<>();
-		lore.add(ChatColor.GRAY + "Damage: " + ChatColor.RED + "+120♦");
+		lore.add(ChatColor.GRAY + "Damage: " + ChatColor.RED + "120♦");
 		lore.add(ChatColor.GRAY + "Strength: " + ChatColor.RED + "+60");
 		lore.add("");
 		lore.add(ChatColor.DARK_RED + "This item is used for testing");
@@ -67,8 +70,11 @@ public class ItemsTest {
 		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "elementDamage"), PersistentDataType.INTEGER_ARRAY, new int[]{120, 0, 0, 0, 0, 0});
 		meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "strength"), PersistentDataType.INTEGER, 60);
+		meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "name"), PersistentDataType.STRING, "testfiresword2");
 		item.setItemMeta(meta);
 		itemManager.testFireSwordt2 = item;
+		itemManager.canUpgrade.add("testfiresword2");
+		itemManager.sword.add("testfiresword2");
 	}
 	
 	private static void createTestPickaxe(){

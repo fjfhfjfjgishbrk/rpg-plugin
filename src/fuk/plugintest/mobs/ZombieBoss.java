@@ -74,6 +74,7 @@ public class ZombieBoss extends EntityZombie {
 		EntityElementDefense.customElementAttack.put(mobId, EntityElementDefense.setElementStats(0, 20, 10, 50, 30, 60));
 		EntityElementDefense.customElementDefense.put(mobId, EntityElementDefense.setElementStats(-100, 50, -25, 125, 50, 250));
 		MobManager.bossMobs.add(mobId);
+		MobManager.noKill.add(mobId);
 		MobManager.bossExp.put(mobId, 1250000);
 		
 	}
@@ -195,7 +196,7 @@ public class ZombieBoss extends EntityZombie {
 			HealthBar.mobHealth.put(mobID, Math.max(1d, health - 10523d));
 		}
 		
-		if (phase == 1 && HealthBar.mobHealth.get(mobID) < 125000 && !MobManager.changePhase.get(mobID)){
+		if (phase == 1 && HealthBar.mobHealth.get(mobID) < 150000 && !MobManager.changePhase.get(mobID)){
 			for (Player player : playerlist){
 				player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "[Cyrilla] " + ChatColor.RESET + "" + ChatColor.YELLOW + " I will not die!");
 				player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "[Cyrilla] " + ChatColor.RESET + "" + ChatColor.YELLOW + " I will rise again,");
@@ -220,7 +221,7 @@ public class ZombieBoss extends EntityZombie {
 			}, 30);
 		}
 		
-		if (phase == 2 && HealthBar.mobHealth.get(mobID) < 100000 && !MobManager.changePhase.get(mobID)){
+		if (phase == 2 && HealthBar.mobHealth.get(mobID) < 150000 && !MobManager.changePhase.get(mobID)){
 			for (Player player : playerlist){
 				player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "[Cyrilla] " + ChatColor.RESET + "" + ChatColor.RED + " NOOOOOO!");
 				player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "[Cyrilla] " + ChatColor.RESET + "" + ChatColor.RED + " THIS CAN'T BE HAPPENING!!!!");
@@ -242,6 +243,7 @@ public class ZombieBoss extends EntityZombie {
 					HealthBar.mobLevel.put(mobID, 2000);
 					MobManager.phase.put(mobID, 3);
 					MobManager.changePhase.put(mobID, false);
+					MobManager.noKill.remove(mobID);
 				}
 			}, 30);
 		}

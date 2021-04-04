@@ -128,7 +128,7 @@ public class experienceDisturbute implements Listener {
 					player.sendMessage(ChatColor.AQUA + "----------------------------------------------------------");
 					player.sendMessage(ChatColor.BOLD.toString() + ChatColor.AQUA + "Congratulations on leveling up " + ChatColor.BOLD.toString() + ChatColor.BLUE + "Attack Skill!");
 					player.sendMessage(ChatColor.AQUA + "You are now level " + ChatColor.GOLD + Integer.toString(fileSave.attackLevel.get(playername)));
-					player.sendMessage(ChatColor.RED + "Your base critical chance ✹ is now " + df.format((double) critChance / 10000d) + "%");
+					player.sendMessage(ChatColor.RED + "Your base critical chance ✹ is now " + df.format((double) critChance / 100d) + "%");
 					player.sendMessage(ChatColor.RED + "Your base dodge rate ↺ is now " + df.format(dodgeRate) + "%");
 					player.sendMessage(ChatColor.GRAY + "Deal " + Integer.toString((int) (Math.pow(1.8, Math.pow((float) (fileSave.attackLevel.get(playername) - 1) / 10f, 0.5))*100) - 100) + "% more damage to mobs");
 				}

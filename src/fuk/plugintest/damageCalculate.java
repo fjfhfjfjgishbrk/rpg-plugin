@@ -18,6 +18,8 @@ public class damageCalculate {
 	//fire. water, ice, earth, thunder, poison
 	private static NamespacedKey elementdamageTag;
 	private static NamespacedKey strengthTag;
+	private static NamespacedKey nameTag;
+	private static NamespacedKey gemTag;
 	
 	private static ArrayList<Integer> nullDef = new ArrayList<Integer>();
 	
@@ -26,6 +28,8 @@ public class damageCalculate {
 		damageTag = new NamespacedKey(plugin, "damage");
 		elementdamageTag = new NamespacedKey(plugin, "elementDamage");
 		strengthTag = new NamespacedKey(plugin, "strength");
+		nameTag = new NamespacedKey(plugin, "name");
+		gemTag = new NamespacedKey(plugin, "gems");
 		for (int i = 0; i < 6; i++){
 			nullDef.add(0);
 		}
@@ -42,7 +46,10 @@ public class damageCalculate {
 			if (heldItem.getItemMeta().getPersistentDataContainer().has(damageTag, PersistentDataType.INTEGER)){
 				resultDamage = heldItem.getItemMeta().getPersistentDataContainer().get(damageTag, PersistentDataType.INTEGER);
 			}
-			else if (heldItem.getItemMeta().getPersistentDataContainer().has(elementdamageTag, PersistentDataType.INTEGER_ARRAY)){
+			if (heldItem.getItemMeta().getPersistentDataContainer().has(elementdamageTag, PersistentDataType.INTEGER_ARRAY)){
+				if (resultDamage == damage){
+					resultDamage = 0;
+				}
 				ArrayList<Integer> elementDef = EntityElementDefense.elementDefense.get(entity.getType());
 				if (EntityElementDefense.customElementDefense.containsKey(entity.getUniqueId())){
 					elementDef = EntityElementDefense.customElementDefense.get(entity.getUniqueId());
@@ -50,18 +57,22 @@ public class damageCalculate {
 				if (elementDef == null){
 					elementDef = nullDef;
 				}
+				int gems[] = new int[]{0, 0, 0, 0, 0, 0};
+				if (heldItem.getItemMeta().getPersistentDataContainer().has(gemTag, PersistentDataType.INTEGER_ARRAY)){
+					gems = heldItem.getItemMeta().getPersistentDataContainer().get(gemTag, PersistentDataType.INTEGER_ARRAY);
+				}
 				resultDamage = 0;
 				int index = 0;
 				for (Integer eledamage: heldItem.getItemMeta().getPersistentDataContainer().get(elementdamageTag, PersistentDataType.INTEGER_ARRAY)){
 					double def = (double) elementDef.get(index);
 					if (def > 0){
-						resultDamage += eledamage * (1d - def / (double) (175 + def));
+						resultDamage += ((eledamage + gems[index]) * ((1000d + (double) gems[index]) / 1000d)) * (1d - def / (double) (175 + def));
 					}
 					else if (def < 0){
-						resultDamage += eledamage * (1d + Math.abs(def / 125d));
+						resultDamage += ((eledamage + gems[index]) * ((1000d + (double) gems[index]) / 1000d)) * (1d + Math.abs(def / 125d));
 					}
 					else {
-						resultDamage += eledamage;
+						resultDamage += (eledamage + gems[index]) * ((1000d + (double) gems[index]) / 1000d);
 					}
 					index += 1;
 				}
@@ -83,8 +94,8 @@ public class damageCalculate {
 		if (heldItem.hasItemMeta()){
 			
 			//cow sword
-			if (heldItem.getItemMeta().equals(itemManager.cowSword.getItemMeta())){
-				if (entity.getType().equals(EntityType.COW)){
+			if (heldItem.getItemMeta().getPersistentDataContainer().has(nameTag, PersistentDataType.STRING)){
+				if (heldItem.getItemMeta().getPersistentDataContainer().get(nameTag, PersistentDataType.STRING) == "cowsword" && entity.getType() == EntityType.COW){
 					resultDamage += 350;
 					strength += 450;
 				}

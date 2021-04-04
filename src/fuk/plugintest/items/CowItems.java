@@ -49,8 +49,11 @@ public class CowItems {
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "elementDamage"), PersistentDataType.INTEGER_ARRAY, new int[]{0, 0, 0, 30, 0, 0});
 			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "strength"), PersistentDataType.INTEGER, 20);
+			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "name"), PersistentDataType.STRING, "cowsword");
 			item.setItemMeta(meta);
 			itemManager.cowSword = item;
+			itemManager.canUpgrade.add("cowsword");
+			itemManager.sword.add("cowsword");
 		}
 		
 		//stack cow meat
@@ -128,6 +131,7 @@ public class CowItems {
 			meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "health"), PersistentDataType.INTEGER, 3760);
 			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "defense"), PersistentDataType.INTEGER, 450);
+			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "name"), PersistentDataType.STRING, "cowchest");
 			item.setItemMeta(meta);
 			itemManager.cowChestplate = item;
 		}
@@ -175,6 +179,7 @@ public class CowItems {
 			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "health"), PersistentDataType.INTEGER, 6230);
 			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "defense"), PersistentDataType.INTEGER, 1220);
 			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "dodge"), PersistentDataType.INTEGER, 450);
+			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "name"), PersistentDataType.STRING, "cowchest2");
 			item.setItemMeta(meta);
 			itemManager.cowChestplateT2 = item;
 		}
