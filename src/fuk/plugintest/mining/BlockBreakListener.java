@@ -2,6 +2,7 @@ package fuk.plugintest.mining;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -33,6 +34,16 @@ public class BlockBreakListener implements Listener {
 	
 	private NamespacedKey miningTag;
 	
+	private static final List<Material> SWORD_TYPES = new ArrayList<Material>(
+			Arrays.asList(
+				Material.DIAMOND_SWORD,
+				Material.IRON_SWORD,
+				Material.GOLDEN_SWORD,
+				Material.STONE_SWORD,
+				Material.WOODEN_SWORD
+				)
+			);
+	
 	public BlockBreakListener(Main plugin, ProtocolManager protocolManager){
 		interceptPackets(plugin, protocolManager);
 		miningTag = new NamespacedKey(plugin, "miningspeed");
@@ -60,6 +71,9 @@ public class BlockBreakListener implements Listener {
                 	if (player.getEquipment().getItemInMainHand().hasItemMeta()){
                 		if (player.getEquipment().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(miningTag, PersistentDataType.INTEGER)){
                 			miningSpeed += player.getEquipment().getItemInMainHand().getItemMeta().getPersistentDataContainer().get(miningTag, PersistentDataType.INTEGER);
+                		}
+                		if (SWORD_TYPES.contains(player.getEquipment().getItemInMainHand().getType())) {
+                			miningSpeed = 0;
                 		}
                 	}
                 	breakBlocks(thisPlugin, protocolManager, hardness * 8 * (1d - (double) miningSpeed / (double) (miningSpeed + 800d)), 0, player, block.getLocation());

@@ -46,8 +46,8 @@ public class AnvilManager implements Listener {
 		Inventory inv = Bukkit.createInventory(null, 27, "Upgrade items");
 		ItemStack emptyPane = newGlassPane(" ", Material.GRAY_STAINED_GLASS_PANE);
 		ItemStack confirmPane = newGlassPane(ChatColor.GREEN + "Upgrade!", Material.GREEN_STAINED_GLASS_PANE);
-		ItemStack itemPane = newGlassPane(ChatColor.YELLOW + "↓Put item below↓", Material.YELLOW_STAINED_GLASS_PANE);
-		ItemStack gemPane = newGlassPane(ChatColor.YELLOW + "↓Put gems below↓", Material.YELLOW_STAINED_GLASS_PANE);
+		ItemStack itemPane = newGlassPane(ChatColor.YELLOW + "↓ Put item below ↓", Material.YELLOW_STAINED_GLASS_PANE);
+		ItemStack gemPane = newGlassPane(ChatColor.YELLOW + "↓ Put gems below ↓", Material.YELLOW_STAINED_GLASS_PANE);
 		for (int i = 0; i < 9; i++){
 			inv.setItem(i, emptyPane);
 			inv.setItem(i + 18, emptyPane);
@@ -76,6 +76,7 @@ public class AnvilManager implements Listener {
 			return;
 		}
 		if (true){
+			Player player = (Player) event.getViewers().get(0);
 			if (!canClickSlots.contains(event.getSlot())){
 				event.setCancelled(true);
 				return;
@@ -95,14 +96,17 @@ public class AnvilManager implements Listener {
 					if (itemUpgrade.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "name"), PersistentDataType.STRING)){
 						name = itemUpgrade.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "name"), PersistentDataType.STRING);
 						if (!itemManager.canUpgrade.contains(name)){
+							player.sendMessage(ChatColor.RED + "This item cannot be upgraded!");
 							return;
 						}
 					}
 					else {
+						player.sendMessage(ChatColor.RED + "This item cannot be upgraded!");
 						return;
 					}
 				}
 				else {
+					player.sendMessage(ChatColor.RED + "This item cannot be upgraded!");
 					return;
 				}
 				ArrayList<ItemStack> gems = new ArrayList<ItemStack>();
@@ -117,6 +121,7 @@ public class AnvilManager implements Listener {
 						gems.add(item);
 					}
 					else {
+						player.sendMessage(ChatColor.RED + "This item cannot be used to upgrade an item!");
 						return;
 					}
 				}
@@ -217,10 +222,10 @@ public class AnvilManager implements Listener {
 		}
 		List<String> lore = sword.getItemMeta().getLore();
 		for (String line: lore){
-			if (line.toLowerCase().contains("damage")){
+			if (line.toLowerCase().contains("damage:") && !line.toLowerCase().contains("critical")){
 				lore.set(lore.indexOf(line), damageLine);
 			}
-			if (line.toLowerCase().contains("gem")){
+			if (line.toLowerCase().contains("gem boosts:")){
 				hasBoostLine = true;
 				lore.set(lore.indexOf(line), boostLine);
 			}

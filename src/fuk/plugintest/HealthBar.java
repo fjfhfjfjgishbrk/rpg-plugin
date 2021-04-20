@@ -8,20 +8,26 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
+import fuk.plugintest.mobs.CreeperBoss;
 import fuk.plugintest.mobs.MobManager;
 
 public class HealthBar implements Listener {
@@ -55,7 +61,7 @@ public class HealthBar implements Listener {
 	
 	@EventHandler
 	public void entityDamage(EntityDamageByEntityEvent event) {
-		if (event.getEntity().isDead() || event.getEntity() instanceof ArmorStand || event.getEntity() instanceof Player){
+		if (event.getEntity().isDead() || event.getEntity() instanceof ArmorStand || event.getEntity() instanceof Player || event.getEntity() instanceof ItemFrame){
 			return;
 		}
 		if (MobManager.changePhase.containsKey(event.getEntity().getUniqueId())){
@@ -63,6 +69,10 @@ public class HealthBar implements Listener {
 				event.setCancelled(true);
 				return;
 			}
+		}
+		if (event.getEntity().equals(event.getDamager())){
+			event.setCancelled(true);
+			return;
 		}
 		double damageDealt = event.getDamage();
 		boolean crit = false;
@@ -89,7 +99,10 @@ public class HealthBar implements Listener {
 			int attackSpeed = fileSave.attackSpeed.get(playername);
 			int cooldown = (int) (500 - 9.6 * Math.pow(attackSpeed, 0.4));
 			attackCooldown.put(playername, System.currentTimeMillis() + cooldown);
-			BossBarHealth.bossbar.get(event.getEntity().getUniqueId()).addPlayer(player);
+			if (BossBarHealth.bossbar.containsKey(event.getEntity().getUniqueId())) {
+				BossBarHealth.bossbar.get(event.getEntity().getUniqueId()).addPlayer(player);
+			}
+			((LivingEntity) event.getEntity()).setNoDamageTicks(0);
 		}
 		barUpdate(event.getEntity(), damageDealt, crit);
 	}
@@ -98,6 +111,40 @@ public class HealthBar implements Listener {
 	public void entityRegen(EntityRegainHealthEvent event) {
 		barUpdate(event.getEntity(), -event.getAmount(), false);
 		event.setCancelled(true);
+	}
+	
+	@EventHandler
+	public void playerLeftClick(PlayerInteractEvent event) {
+		if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+			Location playerLoc = event.getPlayer().getLocation();
+			Entity attackEntity = null;
+			Double distance = 100d;
+			String playername = event.getPlayer().getName();
+			if (attackCooldown.containsKey(playername)){
+				if (attackCooldown.get(playername) > System.currentTimeMillis()){
+					event.setCancelled(true);
+					return;
+				}
+			}
+			for (Entity entity: event.getPlayer().getWorld().getEntities()) {
+				if (entity.isDead() || entity instanceof ArmorStand || entity instanceof Player || entity instanceof ItemFrame){
+					continue;
+				}
+				Double mobPlayerDistance = playerLoc.distance(entity.getLocation());
+				if (mobPlayerDistance < 6) {
+					if (getLookingAt(event.getPlayer(), entity)) {
+						if (mobPlayerDistance < distance) {
+							attackEntity = entity;
+							distance = mobPlayerDistance;
+						}
+					}
+				}
+				if (attackEntity != null) {
+					event.getPlayer().attack(attackEntity);
+					event.getPlayer().swingMainHand();
+				}
+			}
+		}
 	}
 	
 	
@@ -166,6 +213,10 @@ public class HealthBar implements Listener {
 					if (MobManager.noKill.contains(mobID) && mobHealth.get(mobID) < 0){
 						mobHealth.put(mobID, 1000d);
 						health = 1000;
+						if (BossBarHealth.customName.get(mobID).equals(ChatColor.RED.toString() + "HYPE HYPE HYPE HYPE ZEPHYROS")) {
+							CreeperBoss.deathExplode(plugin, entity);
+						}
+						
 					}
 					
 					
@@ -239,5 +290,14 @@ public class HealthBar implements Listener {
 		}
 		
 	}
+	
+	private boolean getLookingAt(Player player, Entity entity)
+	  {
+	    Location eye = player.getEyeLocation();
+	    Vector toEntity = entity.getLocation().toVector().subtract(eye.toVector());
+	    double dot = toEntity.normalize().dot(eye.getDirection());
+	    Double dis = player.getLocation().distance(entity.getLocation());
+	    return dot > 0.55D + 0.06 * dis;
+	  }
 	
 }

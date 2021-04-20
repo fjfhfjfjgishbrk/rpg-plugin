@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
+import fuk.plugintest.abilities.AbilitiesManager;
 import fuk.plugintest.anvil.AnvilManager;
 import fuk.plugintest.enchants.EnchantManager;
 import fuk.plugintest.items.itemManager;
@@ -13,6 +14,7 @@ import fuk.plugintest.mining.MiningManager;
 import fuk.plugintest.mobs.MobManager;
 import fuk.plugintest.mobs.SummonMobs;
 import fuk.plugintest.recipes.recipeManager;
+import fuk.plugintest.structures.StructuresManager;
 
 public class Main extends JavaPlugin implements Listener{
 	
@@ -43,6 +45,8 @@ public class Main extends JavaPlugin implements Listener{
 		new MobManager(this);
 		new MiningManager(this, protocolManager);
 		new AnvilManager(this);
+		new AbilitiesManager(this);
+		new StructuresManager(this);
 		getCommand("ws").setExecutor(new walkSpeedCommand());
 		getCommand("atk").setExecutor(new atkCommand());
 		getCommand("giveitem").setExecutor(new giveItems());

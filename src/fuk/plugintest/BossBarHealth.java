@@ -45,7 +45,7 @@ public class BossBarHealth {
 			public void run(){
 				for (UUID mobid: bossbar.keySet()){
 					for (Player player: bossbar.get(mobid).getPlayers()){
-						if (player.getLocation().distance(Bukkit.getEntity(mobid).getLocation()) > 10){
+						if (player.getLocation().distance(Bukkit.getEntity(mobid).getLocation()) > 30){
 							bossbar.get(mobid).removePlayer(player);
 						}
 					}

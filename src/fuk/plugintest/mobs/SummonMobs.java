@@ -15,6 +15,10 @@ public class SummonMobs implements CommandExecutor {
 			switch (args[0]){
 				case "zombieboss":
 					MobManager.summonZombieBoss(player, player.getLocation());
+					break;
+				case "creeperboss":
+					MobManager.summonCreeperBoss(player, player.getLocation());
+					break;
 				default:
 					
 			}

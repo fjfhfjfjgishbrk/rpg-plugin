@@ -28,7 +28,7 @@ public class ItemsWheat {
 			ItemMeta meta = item.getItemMeta();
 			meta.setDisplayName(ChatColor.YELLOW + "Stacked wheat");
 			List<String> lore = new ArrayList<>();
-			lore.add(ChatColor.GRAY + "It's just a lot of wheat.");
+			lore.add(ChatColor.DARK_GRAY + "It's just a lot of wheat.");
 			meta.setLore(lore);
 			meta.addEnchant(Enchantment.LUCK, 1, false);
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);

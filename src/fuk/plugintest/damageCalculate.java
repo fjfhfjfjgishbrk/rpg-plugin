@@ -1,6 +1,7 @@
 package fuk.plugintest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
@@ -90,22 +91,108 @@ public class damageCalculate {
 		int atklvl = fileSave.attackLevel.get(playername);
 		
 		//custom item abilities
+		HashMap<String, Integer> sets = new HashMap<String, Integer>();
 		
-		if (heldItem.hasItemMeta()){
-			
-			//cow sword
-			if (heldItem.getItemMeta().getPersistentDataContainer().has(nameTag, PersistentDataType.STRING)){
-				if (heldItem.getItemMeta().getPersistentDataContainer().get(nameTag, PersistentDataType.STRING) == "cowsword" && entity.getType() == EntityType.COW){
-					resultDamage += 350;
-					strength += 450;
+		ItemStack helmet = player.getInventory().getHelmet();
+		if (helmet != null){
+			if (helmet.getItemMeta().getPersistentDataContainer().has(nameTag, PersistentDataType.STRING)){
+				String name = helmet.getItemMeta().getPersistentDataContainer().get(nameTag, PersistentDataType.STRING);
+				switch (name) {
+					case "goldhelmet2":
+						putSet(sets, "gold");
+						break;
+					default:
+						
 				}
 			}
-			
 		}
+		
+		ItemStack chestplate = player.getInventory().getChestplate();
+		if (chestplate != null){
+			if (chestplate.getItemMeta().getPersistentDataContainer().has(nameTag, PersistentDataType.STRING)){
+				String name = chestplate.getItemMeta().getPersistentDataContainer().get(nameTag, PersistentDataType.STRING);
+				switch (name) {
+					case "goldchest":
+						if (player.getWorld().getTime() < 12000) {
+							resultDamage *= 1.05;
+						}
+						putSet(sets, "gold");
+						break;
+					case "goldchest2":
+						if (player.getWorld().getTime() < 12000) {
+							resultDamage *= 1.15;
+						}
+						else {
+							resultDamage *= 1.05;
+						}
+						putSet(sets, "gold");
+						break;
+					default:
+						
+				}
+			}
+		}
+		
+		ItemStack leggings = player.getInventory().getLeggings();
+		if (leggings != null){
+			if (leggings.getItemMeta().getPersistentDataContainer().has(nameTag, PersistentDataType.STRING)){
+				String name = leggings.getItemMeta().getPersistentDataContainer().get(nameTag, PersistentDataType.STRING);
+				switch (name) {
+					case "goldleggings2":
+						putSet(sets, "gold");
+						break;
+					default:
+						
+				}
+			}
+		}
+		
+		ItemStack boots = player.getInventory().getBoots();
+		if (boots != null){
+			if (boots.getItemMeta().getPersistentDataContainer().has(nameTag, PersistentDataType.STRING)){
+				String name = boots.getItemMeta().getPersistentDataContainer().get(nameTag, PersistentDataType.STRING);
+				switch (name) {
+					case "goldboots2":
+						putSet(sets, "gold");
+						resultDamage *= (1d + sets.get("gold") * 0.02);
+						break;
+					default:
+						
+				}
+			}
+		}
+		
+		if (heldItem != null){
+			if (heldItem.hasItemMeta()) {
+				if (heldItem.getItemMeta().getPersistentDataContainer().has(nameTag, PersistentDataType.STRING)){
+					String name = heldItem.getItemMeta().getPersistentDataContainer().get(nameTag, PersistentDataType.STRING);
+					switch (name) {
+						case "cowsword":
+							if (entity.getType() == EntityType.COW) {
+								resultDamage += 350;
+								strength += 450;
+							}
+							break;
+						default:
+							
+					}
+				}
+			}
+		}
+		
 		
 		resultDamage *= (float) (100 + strength) / 100f;
 		resultDamage *= Math.pow(1.8, Math.pow((float) (atklvl - 1) / 10f, 0.5));
 		return resultDamage;
+	}
+	
+	private static void putSet(HashMap<String, Integer> map, String s) {
+		if (map.containsKey(s)) {
+			map.put(s, map.get(s) + 1);
+		}
+		else {
+			map.put(s, 1);
+		}
 	}
 	
 }

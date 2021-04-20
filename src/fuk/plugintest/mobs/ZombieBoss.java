@@ -12,12 +12,15 @@ import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -29,6 +32,7 @@ import fuk.plugintest.HealthBar;
 import fuk.plugintest.Main;
 import net.minecraft.server.v1_16_R3.EntityCreature;
 import net.minecraft.server.v1_16_R3.EntityHuman;
+import net.minecraft.server.v1_16_R3.EntityInsentient;
 import net.minecraft.server.v1_16_R3.EntityTypes;
 import net.minecraft.server.v1_16_R3.EntityZombie;
 import net.minecraft.server.v1_16_R3.EnumItemSlot;
@@ -63,8 +67,15 @@ public class ZombieBoss extends EntityZombie {
 		meta.setColor(Color.fromRGB(252, 115, 40));
 		meta.setUnbreakable(true);
 		leatherHelm.setItemMeta(meta);
+		
+		ItemStack chainBoots = new ItemStack(Material.CHAINMAIL_BOOTS);
+		ItemMeta cbmeta = chainBoots.getItemMeta();
+		meta.setUnbreakable(true);
+		meta.addEnchant(Enchantment.DEPTH_STRIDER, 10, true);
+		chainBoots.setItemMeta(cbmeta);
+		
 		this.setSlot(EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(leatherHelm), true);
-		this.setSlot(EnumItemSlot.FEET, CraftItemStack.asNMSCopy(new ItemStack(Material.CHAINMAIL_BOOTS)), true);
+		this.setSlot(EnumItemSlot.FEET, CraftItemStack.asNMSCopy(chainBoots), true);
 		
 		UUID mobId = this.uniqueID;
 		BossBarHealth.customName.put(mobId, ChatColor.GOLD.toString() + "Cyrilla the corpse");
@@ -83,12 +94,10 @@ public class ZombieBoss extends EntityZombie {
 	@Override
 	protected void initPathfinder() {
 		this.goalSelector.a(0, new PathfinderGoalFloat(this));
-		this.goalSelector.a(1, new CustomMeleeAttack((EntityCreature) this, 1.6d, false, 6));
-		this.goalSelector.a(2, new PathfinderGoalMoveTowardsTarget((EntityCreature) this, 2.0d, 3.0f));
-		this.goalSelector.a(5, new PathfinderGoalMoveTowardsRestriction(this, 2.0D));
-		this.goalSelector.a(4, new PathfinderGoalRandomStroll(this, 1.0d));
+		this.goalSelector.a(1, new CustomZombieAttack((EntityZombie) this, 1.2d, false, 10));
+		this.goalSelector.a(4, new PathfinderGoalMoveTowardsTarget((EntityCreature) this, 1.3d, 30.0f));
+		this.goalSelector.a(7, new PathfinderGoalRandomStroll(this, 1.0d));
 		this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
-		
 		this.targetSelector.a(0, new PathfinderGoalHurtByTarget((EntityCreature) this, EntityHuman.class));
 		this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget<EntityHuman>(this, EntityHuman.class, true));
 	}
@@ -97,6 +106,8 @@ public class ZombieBoss extends EntityZombie {
 		double heal = 0;
 		Integer phase = MobManager.phase.get(entity.getUniqueId());
 		ChatColor mobColor;
+		EntityInsentient nmsEntity = (EntityInsentient) ((CraftEntity) entity).getHandle();
+		
 		switch (phase){
 			case 1:
 				mobColor = ChatColor.YELLOW;
@@ -128,9 +139,9 @@ public class ZombieBoss extends EntityZombie {
 				dustOptions = new DustOptions(Color.fromRGB(18, 64, 21), 1);
 		}
 		UUID mobID = entity.getUniqueId();
-		for (Entity e : entity.getWorld().getEntities()){
-			if (e instanceof Zombie){
-		    	if (entity.getLocation().distance(e.getLocation()) < 15){
+		for (Entity ee : entity.getWorld().getEntities()){
+			if (ee instanceof Zombie){
+		    	if (entity.getLocation().distance(ee.getLocation()) < 15){
 		    		heal += 712 * (phase + (double) (875000 - HealthBar.mobHealth.get(mobID)) / 225000d);
 		    	}
 		    }
@@ -140,9 +151,15 @@ public class ZombieBoss extends EntityZombie {
 		
 		ArrayList<Player> playerlist = new ArrayList<Player>();
 		for (Player player : Bukkit.getOnlinePlayers()){
-			if (player.getLocation().distance(entity.getLocation()) < 15) {
+			double distance = player.getLocation().distance(entity.getLocation());
+			if (distance < 15) {
 				playerlist.add(player);
 			}
+			else if (distance < 30) {
+				playerlist.add(player);
+				player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 30, 1, true, true));
+			}
+			
 		}
 		
 		if (Math.random() < (0.015 + 0.015 * phase)){
@@ -212,9 +229,11 @@ public class ZombieBoss extends EntityZombie {
 					HealthBar.mobHealth.put(mobID, 875000d);
 					DustOptions dustOptions = new DustOptions(Color.fromRGB(125, 19, 22), 1);
 					entity.getWorld().spawnParticle(Particle.REDSTONE, entity.getLocation(), 500, 1.9d, 2.1d, 1.9d, dustOptions);
+					nmsEntity.goalSelector.a(new CustomZombieAttack((EntityZombie) nmsEntity, 1.2d, false, 10));
+					nmsEntity.goalSelector.a(1, new CustomZombieAttack((EntityZombie) nmsEntity, 1.2d, false, 6));
 					BossBarHealth.customName.put(mobID, ChatColor.RED.toString() + "Cyrilla the cursed corpse");
 					EntityElementDefense.customElementDefense.put(mobID, EntityElementDefense.setElementStats(-65, 75, 10, 160, 75, 350));
-					EntityElementDefense.customElementAttack.put(mobID, EntityElementDefense.setElementStats(0, 35, 25, 75, 40, 85));
+					EntityElementDefense.customElementAttack.put(mobID, EntityElementDefense.setElementStats(0, 35, 25, 65, 40, 85));
 					MobManager.phase.put(mobID, 2);
 					MobManager.changePhase.put(mobID, false);
 				}
@@ -238,8 +257,10 @@ public class ZombieBoss extends EntityZombie {
 					DustOptions dustOptions = new DustOptions(Color.fromRGB(230, 91, 11), 1);
 					entity.getWorld().spawnParticle(Particle.REDSTONE, entity.getLocation(), 750, 1.9d, 2.1d, 1.9d, dustOptions);
 					BossBarHealth.customName.put(mobID, ChatColor.DARK_RED.toString() + "Cyrilla the enraged corpse");
+					nmsEntity.goalSelector.a(new CustomZombieAttack((EntityZombie) nmsEntity, 1.2d, false, 6));
+					nmsEntity.goalSelector.a(1, new CustomZombieAttack((EntityZombie) nmsEntity, 1.2d, false, 3));
 					EntityElementDefense.customElementDefense.put(mobID, EntityElementDefense.setElementStats(-35, 100, 30, 200, 115, 450));
-					EntityElementDefense.customElementAttack.put(mobID, EntityElementDefense.setElementStats(40, 95, 75, 125, 100, 145));
+					EntityElementDefense.customElementAttack.put(mobID, EntityElementDefense.setElementStats(30, 95, 75, 105, 90, 125));
 					HealthBar.mobLevel.put(mobID, 2000);
 					MobManager.phase.put(mobID, 3);
 					MobManager.changePhase.put(mobID, false);

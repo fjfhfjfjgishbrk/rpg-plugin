@@ -3,6 +3,7 @@ package fuk.plugintest;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -13,8 +14,8 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import fuk.plugintest.abilities.AbilitiesManager;
 import fuk.plugintest.enchants.EnchantManager;
-import fuk.plugintest.items.itemManager;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -22,26 +23,27 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class playerHealth implements Listener {
 
 	private Main plugin;
-	public static int maxHealthActual;
+	public static HashMap<String, Integer> maxHealthActual = new HashMap<String, Integer>();
 	public static int defenseActual;
+	
+	List<NamespacedKey> tags = new ArrayList<NamespacedKey>();
 	
 	public playerHealth(Main plugin){
 		this.plugin = plugin;
+		tags.add(new NamespacedKey(plugin, "health"));
+		tags.add(new NamespacedKey(plugin, "defense"));
+		tags.add(new NamespacedKey(plugin, "dodge"));
+		tags.add(new NamespacedKey(plugin, "heal"));
+		tags.add(new NamespacedKey(plugin, "critDamage"));
+		tags.add(new NamespacedKey(plugin, "attackSpeed"));
 		actionBarUpdate();
 	}
 	
 	private int[] checkTags(ItemStack item, int[] boosts){
-		NamespacedKey healthTag = new NamespacedKey(plugin, "health");
-		NamespacedKey defenseTag = new NamespacedKey(plugin, "defense");
-		NamespacedKey dodgeTag = new NamespacedKey(plugin, "dodge");
-		if (item.getItemMeta().getPersistentDataContainer().has(healthTag, PersistentDataType.INTEGER)){
-			boosts[0] += item.getItemMeta().getPersistentDataContainer().get(healthTag, PersistentDataType.INTEGER);
-		}
-		if (item.getItemMeta().getPersistentDataContainer().has(defenseTag, PersistentDataType.INTEGER)){
-			boosts[1] += item.getItemMeta().getPersistentDataContainer().get(defenseTag, PersistentDataType.INTEGER);
-		}
-		if (item.getItemMeta().getPersistentDataContainer().has(dodgeTag, PersistentDataType.INTEGER)){
-			boosts[2] += item.getItemMeta().getPersistentDataContainer().get(dodgeTag, PersistentDataType.INTEGER);
+		for (int i = 0; i < tags.size(); i++) {
+			if (item.getItemMeta().getPersistentDataContainer().has(tags.get(i), PersistentDataType.INTEGER)){
+				boosts[i] += item.getItemMeta().getPersistentDataContainer().get(tags.get(i), PersistentDataType.INTEGER);
+			}
 		}
 		return boosts;
 	}
@@ -94,6 +96,8 @@ public class playerHealth implements Listener {
 					int dodge = fileSave.attackLevel.get(playername);
 					int speed = fileSave.farmLevel.get(playername);
 					long heal = fileSave.fishLevel.get(playername);
+					long critDamage = 2000 + fileSave.forageLevel.get(playername) * 10;
+					int attackSpeed = fileSave.defenseLevel.get(playername) + AbilitiesManager.attackSpeedValue.getOrDefault(playername, 0);
 					
 					double healpercent = 1d + (double) heal * 0.0004;
 					
@@ -106,11 +110,19 @@ public class playerHealth implements Listener {
 					
 					healpercent += (double) healfood / 10000d;
 					
-					// atk, def, dodge
-					int boost[] = new int[]{0, 0, 0};
+					// atk, def, dodge, heal, critdamage, attackspeed
+					int boost[] = new int[]{0, 0, 0, 0, 0, 0};
 					ArrayList<Integer> eleDefBoost = new ArrayList<Integer>();
 					for (int i = 0; i < 6; i++){
 						eleDefBoost.add(0);
+					}
+					
+					//helmet
+					ItemStack helmet = player.getInventory().getHelmet();
+					
+					if (helmet != null){
+						boost = checkTags(helmet, boost);
+						eleDefBoost = checkEleDef(helmet, eleDefBoost);
 					}
 					
 					
@@ -122,23 +134,77 @@ public class playerHealth implements Listener {
 						eleDefBoost = checkEleDef(chestplate, eleDefBoost);
 					}
 					
+					//leggings
+					ItemStack leggings = player.getInventory().getLeggings();
+					
+					if (leggings != null){
+						boost = checkTags(leggings, boost);
+						eleDefBoost = checkEleDef(leggings, eleDefBoost);
+					}
+					
+					//boots
+					ItemStack boots = player.getInventory().getBoots();
+					
+					if (boots != null){
+						boost = checkTags(boots, boost);
+						eleDefBoost = checkEleDef(boots, eleDefBoost);
+					}
+					
+					//helditem
+					ItemStack hold = player.getInventory().getItemInMainHand();
+					
+					if (hold != null){
+						if (hold.hasItemMeta()) {
+							boost = checkTags(hold, boost);
+							eleDefBoost = checkEleDef(hold, eleDefBoost);
+						}
+					}
+					
 					//enchant buff
 					
 					dodge += EnchantManager.wheatLevels.get(playername).get("Dodge upgrade");
 					
 					
-					
+					//add boosts
 					maxHealth += boost[0];
 					defense += boost[1];
+					healpercent += (double) boost[3]/ 10000d;
+					critDamage += boost[4];
+					attackSpeed += boost[5];
+					
+					//add abilities percent
+					attackSpeed *= (1d + (double) AbilitiesManager.attackSpeedPercent.getOrDefault(playername, 0) / 100d);
+					
 					fileSave.dodge.put(playername, dodge + boost[2]);
 					fileSave.walkSpeed.put(playername, speed);
 					fileSave.heal.put(playername, heal);
+					fileSave.critDamage.put(playername, critDamage);
+					fileSave.attackSpeed.put(playername, attackSpeed);
 					
 					fileSave.elementdefense.put(playername, eleDefBoost);
 					
 					//-------------------------
 					//looking for custom item buffs
 					NamespacedKey nameTag = new NamespacedKey(plugin, "name");
+					
+					if (leggings != null){
+						if (leggings.getItemMeta().getPersistentDataContainer().has(nameTag, PersistentDataType.STRING)){
+							String name = leggings.getItemMeta().getPersistentDataContainer().get(nameTag, PersistentDataType.STRING);
+							switch (name) {
+								case "goldleggings":
+									player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 40, 1, false, false));
+									break;
+								case "goldleggings2":
+									player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 40, 1, false, false));
+									if (player.getFireTicks() > 0) {
+										health += (int) ((float) maxHealth * 0.01) * healpercent;
+									}
+									break;
+								default:
+									
+							}
+						}
+					}
 					
 					//chestplate buff
 					if (chestplate != null){
@@ -150,7 +216,7 @@ public class playerHealth implements Listener {
 						}
 					}
 					
-					maxHealthActual = maxHealth;
+					maxHealthActual.put(playername, maxHealth);
 					
 					//setting health
 					health += (int) ((float) maxHealth * 0.01) * healpercent;

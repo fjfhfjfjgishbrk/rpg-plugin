@@ -62,12 +62,12 @@ public class playerEat implements Listener {
 						heal = false;
 					}
 				}
-				else if (health >= playerHealth.maxHealthActual){
+				else if (health >= playerHealth.maxHealthActual.get(playername) - 1){
 					player.sendMessage(ChatColor.GOLD + "Already full health!");
 					heal = false;
 				}
 				if (heal){
-					health = Math.min(playerHealth.maxHealthActual, health + healValue);
+					health = Math.min(playerHealth.maxHealthActual.get(playername), health + healValue);
 					player.sendMessage(ChatColor.RED + "[Healed for " + Integer.toString(healValue) + "♥ health]");
 					fileSave.health.put(playername, health);
 					eat = true;
@@ -152,13 +152,13 @@ public class playerEat implements Listener {
 			//heal boost
 			if (player.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer().has(healBuffTag, PersistentDataType.INTEGER_ARRAY)){
 				boolean boost = true;
-				if (fileSave.dodgeBoost.containsKey(playername)){
-					player.sendMessage(ChatColor.GOLD + "You already have dodge buff!");
+				if (fileSave.healBoost.containsKey(playername)){
+					player.sendMessage(ChatColor.GOLD + "You already have heal buff!");
 					boost = false;
 				}
 				else if (boostCooldown.containsKey(playername)){
 					if (boostCooldown.get(playername) > System.currentTimeMillis()){
-						player.sendMessage(ChatColor.GOLD + "Dodge boosting still in cooldown.");
+						player.sendMessage(ChatColor.GOLD + "Heal boosting still in cooldown.");
 						boost = false;
 					}
 				}

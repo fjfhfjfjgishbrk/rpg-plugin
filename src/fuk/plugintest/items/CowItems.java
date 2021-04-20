@@ -129,8 +129,8 @@ public class CowItems {
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 			meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 			meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "health"), PersistentDataType.INTEGER, 3760);
-			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "defense"), PersistentDataType.INTEGER, 450);
+			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "health"), PersistentDataType.INTEGER, 2650);
+			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "defense"), PersistentDataType.INTEGER, 350);
 			meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "name"), PersistentDataType.STRING, "cowchest");
 			item.setItemMeta(meta);
 			itemManager.cowChestplate = item;

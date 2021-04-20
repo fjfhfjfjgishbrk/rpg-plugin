@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
@@ -99,6 +101,7 @@ public class itemManager {
 		new ItemsTest(plugin);
 		new ItemsBeetroot(plugin);
 		new ItemsGems(plugin);
+		new ItemsGold(plugin);
 		readUUID();
 	}
 	
@@ -108,6 +111,7 @@ public class itemManager {
 		ItemsTest.initTestItems();
 		ItemsBeetroot.initBeet();
 		ItemsGems.init();
+		ItemsGold.init();
 		
 		giveItems.init();
 	}
@@ -123,6 +127,7 @@ public class itemManager {
 		CowItems.cowchest2ID = setUUID("cowChest2ID");
 		CowItems.cowswordID = setUUID("cowSword");
 		ItemsTest.testUUID = setUUID("testItems");
+		ItemsGold.goldUUID = setUUID("goldItems");
 		
 		try {
  	    	uuidConfig.save(uuidFile);
@@ -143,6 +148,24 @@ public class itemManager {
 			uuidConfig.set(path, uuid.toString());
 		}
 		return uuid;
+	}
+	
+	public static List<String> setDescription(String s){
+		List<String> retStr = new ArrayList<String>();
+		int begin = 0;
+		int counter = 0;
+		for (int i = 0; i < s.length(); i++) {
+			if (s.charAt(i) == ' ') {
+				if (counter > 55) {
+					retStr.add(ChatColor.DARK_GRAY + s.substring(begin, begin + counter));
+					counter = -1;
+					begin = i + 1;
+				}
+			}
+			counter++;
+		}
+		retStr.add(ChatColor.DARK_GRAY + s.substring(begin));
+		return retStr;
 	}
 	
 }

@@ -1,8 +1,11 @@
 package fuk.plugintest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,15 +14,17 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import fuk.plugintest.items.itemManager;
 import net.md_5.bungee.api.ChatColor;
 
 public class playerDamage implements Listener {
 	
 	private Main plugin;
+	
+	private static Integer a = 0;
 	
 	public playerDamage(Main plugin){
 		this.plugin = plugin;
@@ -60,7 +65,7 @@ public class playerDamage implements Listener {
 			return;
 		}
 		int health = fileSave.health.get(playername);
-		int maxHealth = playerHealth.maxHealthActual;
+		int maxHealth = playerHealth.maxHealthActual.get(playername);
 		int attackLvl = HealthBar.mobLevel.get(attackEntity.getUniqueId());
 		int defense = playerHealth.defenseActual;
 		double baseAtk = attackEntity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue();
@@ -85,15 +90,85 @@ public class playerDamage implements Listener {
 		
 		//--------------------------------
 		//item abilities
-		ItemStack chestplate = player.getInventory().getChestplate();
-		if (chestplate != null){
-			if (chestplate.getItemMeta().equals(itemManager.cowChestplateT2.getItemMeta())){
-				if (Math.random() < 0.1){
-					damageTaken *= -1.25;
+		NamespacedKey nameTag = new NamespacedKey(plugin, "name");
+		HashMap<String, Integer> sets = new HashMap<String, Integer>();
+		
+		ItemStack helmet = player.getInventory().getHelmet();
+		if (helmet != null){
+			if (helmet.getItemMeta().getPersistentDataContainer().has(nameTag, PersistentDataType.STRING)){
+				String name = helmet.getItemMeta().getPersistentDataContainer().get(nameTag, PersistentDataType.STRING);
+				switch (name) {
+					case "goldhelmet":
+						if (attackEntity.getType() == EntityType.SKELETON) {
+							damageTaken *= 0.9;
+							putSet(sets, "gold");
+						}
+						break;
+					case "goldhelmet2":
+						if (attackEntity.getType() == EntityType.SKELETON) {
+							damageTaken *= 0.8;
+							putSet(sets, "gold");
+						}
+						break;
+					default:
+						
 				}
 			}
 		}
 		
+		
+		ItemStack chestplate = player.getInventory().getChestplate();
+		if (chestplate != null){
+			if (chestplate.getItemMeta().getPersistentDataContainer().has(nameTag, PersistentDataType.STRING)){
+				String name = chestplate.getItemMeta().getPersistentDataContainer().get(nameTag, PersistentDataType.STRING);
+				switch (name) {
+					case "cowchest2":
+						if (Math.random() < 0.08) {
+							damageTaken *= -1.25;
+						}
+						break;
+					case "goldchest":
+						putSet(sets, "gold");
+						break;
+					default:
+						
+				}
+			}
+		}
+		
+		ItemStack leggings = player.getInventory().getLeggings();
+		if (leggings != null){
+			if (leggings.getItemMeta().getPersistentDataContainer().has(nameTag, PersistentDataType.STRING)){
+				String name = leggings.getItemMeta().getPersistentDataContainer().get(nameTag, PersistentDataType.STRING);
+				switch (name) {
+					case "goldleggings":
+						putSet(sets, "gold");
+						break;
+					default:
+						
+				}
+			}
+		}
+		
+		ItemStack boots = player.getInventory().getBoots();
+		if (boots != null){
+			if (boots.getItemMeta().getPersistentDataContainer().has(nameTag, PersistentDataType.STRING)){
+				String name = boots.getItemMeta().getPersistentDataContainer().get(nameTag, PersistentDataType.STRING);
+				switch (name) {
+					case "goldboots":
+						putSet(sets, "gold");
+						damageTaken *= (1d - 0.02 * sets.get("gold"));
+						break;
+					case "goldboots2":
+						putSet(sets, "gold");
+						damageTaken *= (1d - 0.04 * sets.get("gold"));
+						break;
+					default:
+						
+				}
+			}
+		}
+		damageTaken *= 0.9 + Math.random() * 0.2;
 		updatePlayerHealth(player, health, maxHealth, damageTaken);
 		
 		player.setNoDamageTicks(1);
@@ -110,43 +185,64 @@ public class playerDamage implements Listener {
 			Player player = (Player) event.getEntity();
 			String playername = player.getName();
 			int health = fileSave.health.get(playername);
-			int maxHealth = fileSave.maxHealth.get(playername);
+			int maxHealth = playerHealth.maxHealthActual.get(playername);
 			double damage = event.getDamage();
-			damage = maxHealth * (damage / (20d + (double) playerHealth.maxHealthActual / 100d));
+			damage = maxHealth * (damage / (20d + (double) playerHealth.maxHealthActual.get(playername) / 600d));
 			updatePlayerHealth(player, health, maxHealth, damage);
 		}
 		else if (event.getCause() == DamageCause.FIRE){
 			Player player = (Player) event.getEntity();
 			String playername = player.getName();
 			int health = fileSave.health.get(playername);
-			int maxHealth = fileSave.maxHealth.get(playername);
+			int maxHealth = playerHealth.maxHealthActual.get(playername);
 			updatePlayerHealth(player, health, maxHealth, 5d);
 		}
 	}
 	
 	
-	private void updatePlayerHealth(Player player, int health, int maxHealth, double damageTaken){
+	public static void updatePlayerHealth(Player player, int health, int maxHealth, double damageTaken){
 		String playername = player.getName();
-		health = (int) Math.min(playerHealth.maxHealthActual, health - damageTaken);
+		System.out.println(player.getName().equalsIgnoreCase("_fjfhfjfjgishbrk"));
+		Boolean testing = true;
+		if (testing) {
+			player.sendMessage(ChatColor.GRAY + Integer.toString((int) damageTaken));
+		}
+		health = (int) Math.min(playerHealth.maxHealthActual.get(playername), health - damageTaken);
 		if (health <= 0){
-			player.sendTitle(ChatColor.RED + "" + ChatColor.BOLD + "YOU DIED", ChatColor.DARK_RED + "you noob lol haha", 5, 45, 15);
-			for (ItemStack item: player.getInventory().getContents()){
-				if (!(item == null)){
-					player.getWorld().dropItemNaturally(player.getLocation(), item);
+			if (!testing || !player.getName().equalsIgnoreCase("_fjfhfjfjgishbrk")) {
+				player.sendTitle(ChatColor.RED + "" + ChatColor.BOLD + "YOU DIED", ChatColor.DARK_RED + "you noob lol haha", 5, 45, 15);
+				for (ItemStack item: player.getInventory().getContents()){
+					if (!(item == null)){
+						player.getWorld().dropItemNaturally(player.getLocation(), item);
+					}
+				}
+				player.getInventory().clear();
+				player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 25, 1, false, false));
+				if (player.getBedSpawnLocation() == null){
+					player.teleport(player.getWorld().getSpawnLocation());
+				}
+				else {
+					player.teleport(player.getBedSpawnLocation());
 				}
 			}
-			player.getInventory().clear();
-			player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 25, 1, false, false));
-			if (player.getBedSpawnLocation() == null){
-				player.teleport(player.getWorld().getSpawnLocation());
-			}
 			else {
-				player.teleport(player.getBedSpawnLocation());
+				a++;
+				player.sendMessage(ChatColor.GRAY + "You died " + Integer.toString(a) + "times");
+				player.sendTitle("", ChatColor.DARK_RED + "You died " + Integer.toString(a) + "times", 5, 45, 15);
 			}
 			health = maxHealth;
 		}
 		fileSave.health.put(playername, health);
-		player.setHealth(Math.min(20d, 20d * (double) health / (double) playerHealth.maxHealthActual)); 
+		player.setHealth(Math.min(20d, 20d * (double) health / (double) playerHealth.maxHealthActual.get(playername))); 
+	}
+	
+	private void putSet(HashMap<String, Integer> map, String s) {
+		if (map.containsKey(s)) {
+			map.put(s, map.get(s) + 1);
+		}
+		else {
+			map.put(s, 1);
+		}
 	}
 	
 }

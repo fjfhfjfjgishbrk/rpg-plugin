@@ -40,6 +40,18 @@ public class giveItems implements CommandExecutor {
 		items.put("earthgem", itemManager.earthGem);
 		items.put("thundergem", itemManager.thunderGem);
 		items.put("magicgem", itemManager.magicGem);
+		items.put("stackgold", itemManager.stackGold);
+		items.put("stackgoldblock", itemManager.stackGoldBlock);
+		items.put("goldhelmet", itemManager.goldHelmet);
+		items.put("goldchest", itemManager.goldChestplate);
+		items.put("goldleggings", itemManager.goldLeggings);
+		items.put("goldboots", itemManager.goldBoots);
+		items.put("goldhelmet2", itemManager.goldHelmetT2);
+		items.put("goldchest2", itemManager.goldChestplateT2);
+		items.put("goldleggings2", itemManager.goldLeggingsT2);
+		items.put("goldboots2", itemManager.goldBootsT2);
+		items.put("goldsword", itemManager.goldSword);
+		items.put("goldsword2", itemManager.goldSwordT2);
 	}
 	
 	@Override
